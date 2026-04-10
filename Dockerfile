@@ -15,20 +15,22 @@ COPY . .
 # 构建项目
 RUN npm run build
 
-# 生产阶段
-FROM nginx:alpine
+# 生产阶段 - 使用 Node.js 运行 Vue 应用
+FROM node:18-alpine
 
-# 复制自定义 nginx 配置
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-# 从构建阶段复制构建产物到 nginx
-COPY --from=builder /app/dist /usr/share/nginx/html
+# 安装 serve 作为静态文件服务器
+RUN npm install -g serve
 
-# 复制 admin 目录到容器
-COPY admin /usr/share/nginx/html/admin
+# 从构建阶段复制构建产物
+COPY --from=builder /app/dist ./dist
 
-# 暴露 80 和 5173 端口
-EXPOSE 80 5173
+# 复制 admin 目录
+COPY admin ./admin
 
-# 启动 nginx
-CMD ["nginx", "-g", "daemon off;"]
+# 暴露 3000 端口 (主站) 和 3001 端口 (管理后台)
+EXPOSE 3000 3001
+
+# 启动 serve 服务
+CMD ["sh", "-c", "serve -s dist -l 3000 & serve -s admin -l 3001"]
