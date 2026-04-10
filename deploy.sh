@@ -11,25 +11,25 @@ echo "========================================="
 # 1. 停止Docker服务
 echo ""
 echo "[1/3] 停止 Docker 服务..."
-docker-compose down
+docker compose down
 echo "✓ Docker 服务已停止"
 
 # 2. 拉取最新代码
 echo ""
 echo "[2/3] 拉取最新代码..."
-git pull origin main
+git pull origin master
 echo "✓ 代码已更新"
 
 # 3. 重新构建并启动
 echo ""
 echo "[3/3] 重新构建并启动 Docker 服务..."
-docker-compose up -d --build
+docker compose up -d --build
 echo "✓ Docker 服务已启动"
 
 # 4. 查看服务状态
 echo ""
 echo "检查服务状态..."
-docker-compose ps
+docker compose ps
 
 echo ""
 echo "========================================="
