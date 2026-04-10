@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 - 动漫天堂</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a12;--bg2:#0f0f1e;--bg3:#16162a;--card:#13131f;
+  --border:rgba(255,255,255,0.06);--accent:#7c6af7;--accent2:#b57bee;
+  --glow:rgba(124,106,247,0.28);--text:#e8e8f5;--sub:#8888aa;--gold:#f0b429;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);
+  font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;
+  min-height:100vh;display:flex;}
+
+/* SIDEBAR */
+.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;height:100vh;z-index:100;}
+.sb-logo{padding:22px 20px;display:flex;align-items:center;gap:9px;
+  font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid var(--border);}
+.sb-logo-icon{width:28px;height:28px;border-radius:7px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  box-shadow:0 0 12px var(--glow);}
+.sb-menu{padding:10px 0;flex:1;overflow-y:auto;}
+.sb-section{padding:10px 16px 4px;font-size:10px;font-weight:600;color:var(--sub);
+  letter-spacing:1px;text-transform:uppercase;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:var(--sub);
+  cursor:pointer;border:none;background:none;width:100%;font-family:inherit;text-align:left;
+  border-left:3px solid transparent;transition:all .18s;}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.sb-item.on{color:var(--accent2);background:rgba(124,106,247,.08);border-left-color:var(--accent);}
+.sb-item .ic{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.sb-bottom{padding:14px 20px;border-top:1px solid var(--border);}
+.sb-back{color:var(--sub);text-decoration:none;font-size:13px;
+  display:flex;align-items:center;gap:6px;transition:color .18s;}
+.sb-back:hover{color:var(--accent2);}
+
+/* MAIN */
+.main{margin-left:220px;flex:1;padding:28px 32px 60px;min-width:0;}
+.page-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.page-title{font-size:20px;font-weight:700;color:#fff;}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;
+  display:flex;align-items:center;gap:14px;}
+.stat-ic{width:46px;height:46px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ic-purple{background:rgba(124,106,247,.18);}
+.ic-blue{background:rgba(59,130,246,.18);}
+.ic-green{background:rgba(34,197,94,.18);}
+.ic-orange{background:rgba(249,115,22,.18);}
+.stat-val{font-size:26px;font-weight:700;color:#fff;line-height:1;margin-bottom:3px;}
+.stat-lbl{font-size:12px;color:var(--sub);}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:20px;}
+.sec-title{font-size:14px;font-weight:700;color:#fff;
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.sec-title::before{content:'';width:3px;height:14px;
+  background:linear-gradient(to bottom,var(--accent),var(--accent2));border-radius:2px;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{text-align:left;padding:9px 12px;color:var(--sub);
+  font-weight:500;border-bottom:1px solid var(--border);}
+.tbl td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.03);color:#ccc;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+
+.badge{padding:2px 9px;border-radius:8px;font-size:11px;font-weight:500;}
+.b-green{background:rgba(34,197,94,.12);color:#4ade80;}
+.b-blue{background:rgba(59,130,246,.12);color:#60a5fa;}
+.b-gray{background:rgba(255,255,255,.06);color:var(--sub);}
+.b-red{background:rgba(248,113,113,.12);color:#f87171;}
+.b-purple{background:rgba(124,106,247,.12);color:var(--accent2);}
+.b-orange{background:rgba(249,115,22,.12);color:#fb923c;}
+.b-gold{background:rgba(240,180,41,.12);color:var(--gold);}
+
+/* FORM CONTROLS */
+.ctrl{background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:7px 12px;color:var(--text);font-size:13px;outline:none;font-family:inherit;
+  transition:border-color .2s;}
+.ctrl:focus{border-color:var(--accent);}
+.ctrl::placeholder{color:var(--sub);}
+select.ctrl option{background:var(--bg3);}
+
+.btn{border:none;padding:7px 16px;border-radius:8px;cursor:pointer;
+  font-size:13px;font-family:inherit;font-weight:500;transition:all .18s;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;box-shadow:0 2px 8px var(--glow);}
+.btn-primary:hover{opacity:.85;}
+.btn-ghost{background:var(--bg3);color:var(--sub);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--text);}
+.btn-danger{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.2);}
+.btn-danger:hover{background:rgba(248,113,113,.2);}
+.btn-success{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
+.btn-success:hover{background:rgba(34,197,94,.2);}
+.btn-warning{background:rgba(240,180,41,.12);color:var(--gold);border:1px solid rgba(240,180,41,.2);}
+.btn-warning:hover{background:rgba(240,180,41,.2);}
+.btn-sm{padding:4px 10px;font-size:12px;}
+
+/* CRAWLER BUTTONS */
+.crawler-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;}
+.crawler-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:16px 14px;cursor:pointer;text-align:center;transition:all .2s;
+  color:var(--sub);font-family:inherit;}
+.crawler-btn:hover{border-color:var(--accent);background:rgba(124,106,247,.08);color:var(--text);}
+.crawler-btn .cb-icon{font-size:22px;margin-bottom:7px;}
+.crawler-btn .cb-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.crawler-btn .cb-desc{font-size:11px;color:var(--sub);}
+
+/* retry 按钮区 */
+.retry-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+.retry-item{display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:10px 14px;}
+.retry-label{font-size:13px;color:var(--text);}
+.retry-count{font-size:12px;color:var(--sub);
+  background:rgba(255,255,255,.06);padding:2px 8px;border-radius:10px;}
+.retry-count.has-data{color:#fb923c;background:rgba(249,115,22,.12);}
+
+.crawl-log{background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;font-size:13px;color:var(--sub);min-height:40px;transition:all .2s;}
+.crawl-log.ok{color:#4ade80;border-color:rgba(34,197,94,.2);}
+.crawl-log.err{color:#f87171;border-color:rgba(248,113,113,.2);}
+.crawl-log.loading{color:var(--accent2);}
+
+/* TOP100 排名徽章 */
+.rank-badge{display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:6px;font-size:12px;font-weight:700;}
+.rank-1{background:rgba(240,180,41,.25);color:var(--gold);}
+.rank-2{background:rgba(156,163,175,.2);color:#d1d5db;}
+.rank-3{background:rgba(180,120,60,.2);color:#d97706;}
+.rank-n{background:var(--bg3);color:var(--sub);}
+
+/* PAGINATION */
+.pager{display:flex;gap:6px;margin-top:14px;justify-content:center;}
+.pg-btn{background:var(--bg3);border:1px solid var(--border);color:var(--sub);
+  padding:5px 11px;border-radius:6px;cursor:pointer;font-size:12px;
+  font-family:inherit;transition:all .15s;}
+.pg-btn:hover{border-color:var(--accent);color:var(--text);}
+.pg-btn.on{background:rgba(124,106,247,.15);border-color:var(--accent);color:var(--accent2);font-weight:600;}
+
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sh{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);
+  background-size:200% 100%;animation:sh 1.4s infinite;border-radius:6px;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-icon">⚙️</div>管理后台
+  </div>
+  <div class="sb-menu">
+    <div class="sb-section">概览</div>
+    <button class="sb-item on" onclick="go('dashboard',this)">
+      <span class="ic">📊</span>数据概览
+    </button>
+    <div class="sb-section">内容管理</div>
+    <button class="sb-item" onclick="go('anime',this)">
+      <span class="ic">🎌</span>番剧管理
+    </button>
+    <button class="sb-item" onclick="go('top100',this)">
+      <span class="ic">🏆</span>播放排行
+    </button>
+    <button class="sb-item" onclick="go('search',this)">
+      <span class="ic">🔍</span>搜索统计
+    </button>
+    <!-- <button class="sb-item" onclick="go('users',this)">
+      <span class="ic">👥</span>用户管理
+    </button> -->
+    <div class="sb-section">系统</div>
+    <button class="sb-item" onclick="go('crawler',this)">
+      <span class="ic">🕷️</span>爬虫控制
+    </button>
+  </div>
+  <div class="sb-bottom">
+    <a href="../index.html" class="sb-back">← 返回前台</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- 数据概览 -->
+  <div id="pg-dashboard">
+    <div class="page-hd"><div class="page-title">数据概览</div></div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-ic ic-purple">🎌</div>
+        <div><div class="stat-val" id="sAnime">—</div><div class="stat-lbl">番剧总数</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ic ic-blue">📺</div>
+        <div><div class="stat-val" id="sVideo">统计中</div><div class="stat-lbl">视频集数</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ic ic-green">👥</div>
+        <div><div class="stat-val" id="sUser">—</div><div class="stat-lbl">注册用户</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ic ic-orange">▶️</div>
+        <div><div class="stat-val" id="sView">—</div><div class="stat-lbl">总播放量</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ic ic-pink">👁️</div>
+        <div><div class="stat-val" id="sTodayUV">—</div><div class="stat-lbl">今日 UV</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ic ic-blue">📊</div>
+        <div><div class="stat-val" id="sTodayPV">—</div><div class="stat-lbl">今日 PV</div></div>
+      </div>
+    </div>
+    <!-- UV 趋势 -->
+    <div class="card">
+      <div class="sec-title">访问趋势（近7天 UV）</div>
+      <div id="uvTrend" style="display:flex;gap:8px;align-items:flex-end;height:80px;padding:4px;">
+        <div style="color:var(--sub);font-size:13px;align-self:center">加载中…</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec-title">分类统计</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="typeStats">
+        <div class="sh" style="height:60px;border-radius:10px;"></div>
+        <div class="sh" style="height:60px;border-radius:10px;"></div>
+        <div class="sh" style="height:60px;border-radius:10px;"></div>
+        <div class="sh" style="height:60px;border-radius:10px;"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec-title">最新入库番剧</div>
+      <table class="tbl">
+        <thead><tr><th>ID</th><th>标题</th><th>分类</th><th>集数</th><th>状态</th><th>入库时间</th></tr></thead>
+        <tbody id="recentAnime">
+          <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--sub)">加载中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 番剧管理 -->
+  <div id="pg-anime" style="display:none">
+    <div class="page-hd"><div class="page-title">番剧管理</div></div>
+    <div class="card">
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+        <input id="animeKw" class="ctrl" placeholder="搜索番剧标题…" style="width:220px"
+               onkeydown="if(event.key==='Enter')loadAnime(1)"/>
+        <select id="animeStatus" class="ctrl" onchange="loadAnime(1)">
+          <option value="">全部状态</option>
+          <option value="1">连载中</option>
+          <option value="2">已完结</option>
+          <option value="0">已下线</option>
+        </select>
+        <select id="animeType" class="ctrl" onchange="loadAnime(1)">
+          <option value="">全部分类</option>
+          <option value="25">🇯🇵 日本动漫</option>
+          <option value="26">🌎 欧美动漫</option>
+          <option value="24">🇨🇳 中国动漫</option>
+        </select>
+        <button class="btn btn-primary" onclick="loadAnime(1)">搜索</button>
+        <button class="btn btn-ghost" onclick="resetAnimeFilter()">重置</button>
+        <span style="margin-left:auto;font-size:12px;color:var(--sub)" id="animeTotalLabel"></span>
+      </div>
+      <table class="tbl">
+        <thead>
+          <tr><th>ID</th><th>标题</th><th>分类</th><th>集数</th><th>评分</th><th>状态</th><th>操作</th></tr>
+        </thead>
+        <tbody id="animeTbl">
+          <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--sub)">加载中…</td></tr>
+        </tbody>
+      </table>
+      <div class="pager" id="animePager"></div>
+    </div>
+  </div>
+
+  <!-- 播放排行 TOP 100 -->
+  <div id="pg-top100" style="display:none">
+    <div class="page-hd">
+      <div class="page-title">🏆 播放量排行 TOP 100</div>
+      <button class="btn btn-ghost" onclick="loadTop100()">🔄 刷新</button>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <thead>
+          <tr><th style="width:50px">排名</th><th>番剧</th><th>分类</th><th>集数</th><th>评分</th><th>状态</th><th style="text-align:right">播放量</th></tr>
+        </thead>
+        <tbody id="top100Tbl">
+          <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--sub)">加载中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 搜索统计 -->
+  <div id="pg-search" style="display:none">
+    <div class="page-hd">
+      <div class="page-title">🔍 搜索统计</div>
+      <button class="btn btn-ghost" onclick="loadSearchStats()">🔄 刷新</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <!-- 热门搜索词 -->
+      <div class="card">
+        <div class="sec-title">热门搜索词 TOP 20</div>
+        <div id="hotKeywords">
+          <div style="text-align:center;padding:30px;color:var(--sub)">加载中…</div>
+        </div>
+      </div>
+      <!-- 统计概览 -->
+      <div class="card">
+        <div class="sec-title">搜索概览</div>
+        <div style="display:flex;flex-direction:column;gap:12px;" id="searchOverview">
+          <div style="text-align:center;padding:30px;color:var(--sub)">加载中…</div>
+        </div>
+      </div>
+    </div>
+    <!-- 最近搜索记录 -->
+    <div class="card">
+      <div class="sec-title">最近搜索记录</div>
+      <table class="tbl">
+        <thead><tr><th>关键词</th><th>用户</th><th>IP</th><th>时间</th></tr></thead>
+        <tbody id="recentSearches">
+          <tr><td colspan="4" style="text-align:center;padding:30px;color:var(--sub)">加载中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 用户管理 -->
+  <div id="pg-users" style="display:none">
+    <div class="page-hd"><div class="page-title">用户管理</div></div>
+    <div class="card">
+      <table class="tbl">
+        <thead>
+          <tr><th>ID</th><th>用户名</th><th>邮箱</th><th>角色</th><th>状态</th><th>注册时间</th></tr>
+        </thead>
+        <tbody id="userTbl">
+          <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--sub)">加载中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 爬虫控制 -->
+  <div id="pg-crawler" style="display:none">
+    <div class="page-hd"><div class="page-title">爬虫控制</div></div>
+
+    <div class="card">
+      <div class="sec-title">增量 / 全量爬取</div>
+      <div class="crawler-grid">
+        <button class="crawler-btn" onclick="crawl('crawl-now')">
+          <div class="cb-icon">⚡</div>
+          <div class="cb-title">全部增量爬取</div>
+          <div class="cb-desc">所有分类最新更新</div>
+        </button>
+        <button class="crawler-btn" onclick="crawlIncremental(25)">
+          <div class="cb-icon">🇯🇵</div>
+          <div class="cb-title">日本动漫增量</div>
+          <div class="cb-desc">有变化才更新，自动停止</div>
+        </button>
+        <button class="crawler-btn" onclick="crawlIncremental(26)">
+          <div class="cb-icon">🌎</div>
+          <div class="cb-title">欧美动漫增量</div>
+          <div class="cb-desc">有变化才更新，自动停止</div>
+        </button>
+      </div>
+      <div class="crawler-grid">
+        <button class="crawler-btn" onclick="crawlIncremental(24)">
+          <div class="cb-icon">🇨🇳</div>
+          <div class="cb-title">中国动漫增量</div>
+          <div class="cb-desc">有变化才更新，自动停止</div>
+        </button>
+        <button class="crawler-btn" onclick="crawl('full-sync')">
+          <div class="cb-icon">🔄</div>
+          <div class="cb-title">全量爬取（全部）</div>
+          <div class="cb-desc">全分类，需数小时</div>
+        </button>
+        <button class="crawler-btn" onclick="crawl('fill-covers')">
+          <div class="cb-icon">🖼️</div>
+          <div class="cb-title">补全封面/简介</div>
+          <div class="cb-desc">调用 Bangumi API</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- 失败重试 -->
+    <div class="card">
+      <div class="sec-title">失败记录重试</div>
+      <div class="retry-row" id="retryRow">
+        <div class="retry-item">
+          <span class="retry-label">🇯🇵 日本动漫</span>
+          <span class="retry-count" id="failedCount25">—</span>
+          <button class="btn btn-warning btn-sm" onclick="retryFailed(25)">重试</button>
+        </div>
+        <div class="retry-item">
+          <span class="retry-label">🌎 欧美动漫</span>
+          <span class="retry-count" id="failedCount26">—</span>
+          <button class="btn btn-warning btn-sm" onclick="retryFailed(26)">重试</button>
+        </div>
+        <div class="retry-item">
+          <span class="retry-label">🇨🇳 中国动漫</span>
+          <span class="retry-count" id="failedCount24">—</span>
+          <button class="btn btn-warning btn-sm" onclick="retryFailed(24)">重试</button>
+        </div>
+      </div>
+      <div class="crawl-log" id="crawlLog">点击上方按钮触发爬取任务</div>
+    </div>
+
+    <!-- 数据库统计 -->
+    <div class="card">
+      <div class="sec-title">数据库统计</div>
+      <table class="tbl">
+        <thead><tr><th>表</th><th>数量</th><th>说明</th></tr></thead>
+        <tbody id="dbStats">
+          <tr><td colspan="3" style="text-align:center;padding:20px;color:var(--sub)">加载中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API   = 'http://159.223.81.85:8080'
+const token = localStorage.getItem('ms_token')
+let animePage = 1
+
+const TYPE_MAP   = { '25':'🇯🇵 日本', '26':'🌎 欧美', '24':'🇨🇳 中国' }
+const STATUS_MAP = { 0:['已下线','b-red'], 1:['连载中','b-green'], 2:['已完结','b-blue'] }
+
+/* ── 页面切换 ── */
+function go(name, el) {
+  document.querySelectorAll('[id^="pg-"]').forEach(e => e.style.display = 'none')
+  document.querySelectorAll('.sb-item').forEach(e => e.classList.remove('on'))
+  document.getElementById('pg-' + name).style.display = 'block'
+  el.classList.add('on')
+  if (name === 'dashboard') loadDashboard()
+  if (name === 'anime')     loadAnime(1)
+  if (name === 'top100')    loadTop100()
+  if (name === 'search')    loadSearchStats()
+  if (name === 'users')     loadUsers()
+  if (name === 'crawler')   { loadDbStats(); loadFailedCounts() }
+}
+
+/* ── 数据概览 ── */
+async function loadDashboard() {
+  try {
+    const j = await get(`${API}/api/anime/stats`)
+    const s = j.data
+    document.getElementById('sAnime').textContent = (s.totalAnime || 0).toLocaleString()
+    document.getElementById('sView').textContent  = (s.totalView  || 0).toLocaleString()
+  } catch(e) {
+    document.getElementById('sAnime').textContent = '—'
+    document.getElementById('sView').textContent  = '—'
+  }
+  try {
+    const j = await getAuth(`${API}/api/user/count`)
+    if (j.code === 200) document.getElementById('sUser').textContent = j.data
+  } catch(e) {}
+  loadTypeStats()
+  loadRecentAnime()
+  loadUVStats()
+}
+
+async function loadTypeStats() {
+  try {
+    const j = await get(`${API}/api/anime/stats`)
+    const s = j.data
+    const types = [
+      { label:'🇯🇵 日本动漫', count: s.jpCount },
+      { label:'🌎 欧美动漫', count: s.usCount },
+      { label:'🇨🇳 中国动漫', count: s.cnCount },
+      { label:'📊 全部',     count: s.totalAnime },
+    ]
+    document.getElementById('typeStats').innerHTML = types.map(t => `
+      <div style="background:var(--bg3);border:1px solid var(--border);
+                  border-radius:10px;padding:14px 16px;text-align:center">
+        <div style="font-size:20px;margin-bottom:6px">${t.label.split(' ')[0]}</div>
+        <div style="font-size:22px;font-weight:700;color:#fff">${(t.count||0).toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:2px">${t.label.split(' ').slice(1).join(' ')}</div>
+      </div>`).join('')
+  } catch(e) {}
+}
+
+async function loadRecentAnime() {
+  try {
+    const j = await get(`${API}/api/anime/list?page=1&size=10&sort=latest`)
+    document.getElementById('recentAnime').innerHTML = j.data.records.map(a => {
+      const [lbl, cls] = STATUS_MAP[a.status] || ['未知','b-gray']
+      return `<tr>
+        <td style="color:var(--sub)">${a.id}</td>
+        <td><a href="../detail.html?id=${a.id}" target="_blank"
+               style="color:var(--accent2);text-decoration:none">${a.title}</a></td>
+        <td>${TYPE_MAP[a.type] || a.type || '—'}</td>
+        <td>第 ${a.currentEpisode} 集</td>
+        <td><span class="badge ${cls}">${lbl}</span></td>
+        <td style="color:var(--sub)">${(a.createdAt||'').slice(0,10)}</td>
+      </tr>`
+    }).join('')
+  } catch(e) {}
+}
+
+async function loadUVStats() {
+  try {
+    const j = await get(`${API}/api/anime/visit/stats`)
+    const s = j.data
+    document.getElementById('sTodayUV').textContent = (s.todayUV || 0).toLocaleString()
+    document.getElementById('sTodayPV').textContent = (s.todayPV || 0).toLocaleString()
+
+    // 渲染趋势柱状图
+    const trend = s.trend || []
+    const wrap = document.getElementById('uvTrend')
+    if (!trend.length) {
+      wrap.innerHTML = '<div style="color:var(--sub);font-size:13px;align-self:center">暂无数据</div>'
+      return
+    }
+    const maxUV = Math.max(...trend.map(t => t.uv), 1)
+    wrap.innerHTML = trend.map(t => {
+      const h = Math.max(4, Math.round((t.uv / maxUV) * 72))
+      const date = String(t.date).slice(5) // MM-DD
+      return `
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:11px;color:var(--text);font-weight:600">${t.uv}</div>
+          <div style="width:100%;height:${h}px;
+                      background:linear-gradient(to top,var(--accent),var(--accent2));
+                      border-radius:4px 4px 0 0;opacity:.8;
+                      transition:opacity .2s;cursor:default"
+               title="${date}: ${t.uv} UV"></div>
+          <div style="font-size:10px;color:var(--sub)">${date}</div>
+        </div>`
+    }).join('')
+  } catch(e) {}
+}
+
+/* ── 搜索统计 ── */
+async function loadSearchStats() {
+  try {
+    const j = await get(`${API}/api/anime/search/stats?limit=20&days=7`)
+    const s = j.data
+
+    // 热门搜索词
+    const hotEl = document.getElementById('hotKeywords')
+    if (!s.hotKeywords || !s.hotKeywords.length) {
+      hotEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--sub)">暂无搜索数据</div>'
+    } else {
+      const max = s.hotKeywords[0].cnt
+      hotEl.innerHTML = s.hotKeywords.map((k, i) => `
+        <div style="display:flex;align-items:center;gap:10px;padding:7px 0;
+                    border-bottom:1px solid var(--border);">
+          <span style="width:22px;text-align:center;font-size:12px;color:var(--sub)">${i+1}</span>
+          <span style="flex:1;font-size:13px;color:var(--text)">${k.keyword}</span>
+          <div style="width:80px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:${Math.round(k.cnt/max*100)}%;
+                        background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;"></div>
+          </div>
+          <span style="font-size:12px;color:var(--sub);width:36px;text-align:right">${k.cnt}</span>
+        </div>`).join('')
+    }
+
+    // 概览
+    document.getElementById('searchOverview').innerHTML = `
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
+        <div style="font-size:28px;font-weight:700;color:#fff">${(s.totalSearches||0).toLocaleString()}</div>
+        <div style="font-size:12px;color:var(--sub);margin-top:4px">累计搜索次数</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;text-align:center">
+        <div style="font-size:28px;font-weight:700;color:var(--accent2)">${s.hotKeywords?.length || 0}</div>
+        <div style="font-size:12px;color:var(--sub);margin-top:4px">不同关键词数</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:10px;padding:14px;">
+        <div style="font-size:12px;color:var(--sub);margin-bottom:8px">最近7天趋势</div>
+        <div style="display:flex;gap:4px;align-items:flex-end;height:40px;">
+          ${(s.trend||[]).map(t => {
+            const maxT = Math.max(...(s.trend||[]).map(x=>x.cnt), 1)
+            const h = Math.max(4, Math.round(t.cnt/maxT*40))
+            return `<div title="${t.date}: ${t.cnt}次"
+                         style="flex:1;height:${h}px;background:var(--accent);
+                                border-radius:2px;opacity:.7;"></div>`
+          }).join('')}
+        </div>
+      </div>`
+
+    // 最近搜索记录
+    await loadRecentSearches()
+
+  } catch(e) {
+    document.getElementById('hotKeywords').innerHTML =
+      '<div style="text-align:center;padding:20px;color:#f87171">加载失败</div>'
+  }
+}
+
+async function loadRecentSearches() {
+  try {
+    // 直接从 search_log 表拉最近20条（需要后端加接口）
+    const j = await get(`${API}/api/anime/search/recent?limit=20`)
+    const tbody = document.getElementById('recentSearches')
+    if (!j.data || !j.data.length) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--sub)">暂无数据</td></tr>'
+      return
+    }
+    tbody.innerHTML = j.data.map(r => `
+      <tr>
+        <td style="font-weight:500">${r.keyword}</td>
+        <td style="color:var(--sub)">${r.userId || '未登录'}</td>
+        <td style="color:var(--sub);font-size:12px">${r.ip || '—'}</td>
+        <td style="color:var(--sub)">${(r.createdAt||'').slice(0,16)}</td>
+      </tr>`).join('')
+  } catch(e) {}
+}
+
+/* ── 播放排行 TOP 100 ── */
+async function loadTop100() {
+  const tbl = document.getElementById('top100Tbl')
+  tbl.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--sub)">加载中…</td></tr>'
+  try {
+    const j = await get(`${API}/api/anime/list?page=1&size=100&sort=hot`)
+    const records = j.data.records || []
+    if (!records.length) {
+      tbl.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--sub)">暂无数据</td></tr>'
+      return
+    }
+    tbl.innerHTML = records.map((a, i) => {
+      const rank = i + 1
+      const rankCls = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-n'
+      const [lbl, cls] = STATUS_MAP[a.status] || ['未知','b-gray']
+      return `<tr>
+        <td><span class="rank-badge ${rankCls}">${rank}</span></td>
+        <td><a href="../detail.html?id=${a.id}" target="_blank"
+               style="color:var(--accent2);text-decoration:none;font-weight:500">${a.title}</a></td>
+        <td>${TYPE_MAP[a.type] || '—'}</td>
+        <td style="color:var(--sub)">第 ${a.currentEpisode} 集</td>
+        <td style="color:var(--gold)">${a.rating > 0 ? '★ ' + a.rating : '—'}</td>
+        <td><span class="badge ${cls}">${lbl}</span></td>
+        <td style="text-align:right;font-weight:600;color:#fff">${(a.viewCount||0).toLocaleString()}</td>
+      </tr>`
+    }).join('')
+  } catch(e) {
+    tbl.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#f87171">加载失败</td></tr>'
+  }
+}
+
+/* ── 番剧管理 ── */
+async function loadAnime(page) {
+  animePage = page
+  const kw     = document.getElementById('animeKw').value.trim()
+  const status = document.getElementById('animeStatus').value
+  const type   = document.getElementById('animeType').value
+  let url = `${API}/api/anime/list?page=${page}&size=20&sort=latest`
+  if (kw)     url += `&keyword=${encodeURIComponent(kw)}`
+  if (status) url += `&status=${status}`
+  if (type)   url += `&type=${type}`
+  try {
+    const j = await get(url)
+    const records = j.data.records || []
+    const pages   = j.data.pages   || 1
+    const total   = j.data.total   || 0
+    document.getElementById('animeTotalLabel').textContent = `共 ${total.toLocaleString()} 条`
+    document.getElementById('animeTbl').innerHTML = records.map(a => {
+      const [lbl, cls] = STATUS_MAP[a.status] || ['未知','b-gray']
+      const actionBtn = a.status === 0
+        ? `<button class="btn btn-success btn-sm" onclick="onlineAnime(${a.id})">上线</button>`
+        : `<button class="btn btn-danger btn-sm" onclick="offlineAnime(${a.id})">下线</button>`
+      return `<tr>
+        <td style="color:var(--sub)">${a.id}</td>
+        <td><a href="../detail.html?id=${a.id}" target="_blank"
+               style="color:var(--accent2);text-decoration:none">${a.title}</a></td>
+        <td>${TYPE_MAP[a.type] || a.type || '—'}</td>
+        <td>第 ${a.currentEpisode} 集</td>
+        <td style="color:var(--gold)">${a.rating > 0 ? '★ ' + a.rating : '—'}</td>
+        <td><span class="badge ${cls}">${lbl}</span></td>
+        <td>${actionBtn}</td>
+      </tr>`
+    }).join('')
+    let pg = ''
+    if (page > 1) pg += `<button class="pg-btn" onclick="loadAnime(${page-1})">‹</button>`
+    const s = Math.max(1, page-2), e = Math.min(pages, page+2)
+    if (s > 1) pg += `<button class="pg-btn" onclick="loadAnime(1)">1</button>${s>2?'<span style="color:var(--sub);padding:0 4px">…</span>':''}`
+    for (let i = s; i <= e; i++)
+      pg += `<button class="pg-btn ${i===page?'on':''}" onclick="loadAnime(${i})">${i}</button>`
+    if (e < pages) pg += `${e<pages-1?'<span style="color:var(--sub);padding:0 4px">…</span>':''}<button class="pg-btn" onclick="loadAnime(${pages})">${pages}</button>`
+    if (page < pages) pg += `<button class="pg-btn" onclick="loadAnime(${page+1})">›</button>`
+    document.getElementById('animePager').innerHTML = pg
+  } catch(e) {
+    document.getElementById('animeTbl').innerHTML =
+      '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--sub)">加载失败</td></tr>'
+  }
+}
+
+function resetAnimeFilter() {
+  document.getElementById('animeKw').value     = ''
+  document.getElementById('animeStatus').value = ''
+  document.getElementById('animeType').value   = ''
+  loadAnime(1)
+}
+
+async function offlineAnime(id) {
+  if (!confirm('确定下线该番剧？前台将不再显示，可随时恢复。')) return
+  try {
+    const j = await fetch(`${API}/api/anime/${id}`, {
+      method:'DELETE', headers:{ 'Authorization':'Bearer '+token }
+    }).then(r=>r.json())
+    if (j.code === 200) loadAnime(animePage)
+    else alert(j.message || '操作失败')
+  } catch(e) { alert('网络错误') }
+}
+
+async function onlineAnime(id) {
+  if (!confirm('确定上线该番剧？')) return
+  try {
+    const j = await fetch(`${API}/api/anime/${id}/online`, {
+      method:'PUT', headers:{ 'Authorization':'Bearer '+token }
+    }).then(r=>r.json())
+    if (j.code === 200) loadAnime(animePage)
+    else alert(j.message || '操作失败')
+  } catch(e) { alert('网络错误') }
+}
+
+/* ── 用户管理 ── */
+async function loadUsers() {
+  try {
+    const j = await getAuth(`${API}/api/user/list`)
+    if (j.code !== 200) {
+      document.getElementById('userTbl').innerHTML =
+        '<tr><td colspan="6" style="text-align:center;padding:30px;color:#f87171">需要管理员权限</td></tr>'
+      return
+    }
+    document.getElementById('userTbl').innerHTML = j.data.map(u => `
+      <tr>
+        <td style="color:var(--sub)">${u.id}</td>
+        <td style="font-weight:500">${u.username}</td>
+        <td style="color:var(--sub)">${u.email || '—'}</td>
+        <td><span class="badge ${u.role===1?'b-purple':'b-gray'}">${u.role===1?'🛡️ 管理员':'普通用户'}</span></td>
+        <td><span class="badge ${u.status===0?'b-green':'b-red'}">${u.status===0?'正常':'封禁'}</span></td>
+        <td style="color:var(--sub)">${(u.createdAt||'').slice(0,10)}</td>
+      </tr>`).join('')
+  } catch(e) {
+    document.getElementById('userTbl').innerHTML =
+      '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--sub)">加载失败</td></tr>'
+  }
+}
+
+/* ── 爬虫控制 ── */
+async function crawl(endpoint) {
+  const log = document.getElementById('crawlLog')
+  log.className = 'crawl-log loading'
+  log.textContent = '正在触发任务…'
+  try {
+    const j = await fetch(`${API}/crawler/${endpoint}`, { method:'POST' }).then(r=>r.json())
+    log.className = 'crawl-log ok'
+    log.textContent = '✓ ' + (j.data || '任务已启动（后台运行）')
+  } catch(e) {
+    log.className = 'crawl-log err'
+    log.textContent = '✗ 触发失败，请确认 crawler-service 是否正在运行'
+  }
+}
+
+async function crawlIncremental(type) {
+  const log = document.getElementById('crawlLog')
+  const typeName = type === 25 ? '日本动漫' : type === 26 ? '欧美动漫' : '中国动漫'
+  log.className = 'crawl-log loading'
+  log.textContent = `正在触发 ${typeName} 增量爬取…`
+  try {
+    const j = await fetch(`${API}/crawler/incremental/${type}`, { method:'POST' }).then(r=>r.json())
+    log.className = 'crawl-log ok'
+    log.textContent = '✓ ' + (j.data || '任务已启动')
+  } catch(e) {
+    log.className = 'crawl-log err'
+    log.textContent = '✗ 触发失败'
+  }
+}
+
+async function crawlSync(type) {
+  const log = document.getElementById('crawlLog')
+  log.className = 'crawl-log loading'
+  log.textContent = '正在触发任务…'
+  try {
+    const j = await fetch(`${API}/crawler/sync/${type}`, { method:'POST' }).then(r=>r.json())
+    log.className = 'crawl-log ok'
+    log.textContent = '✓ ' + (j.data || '任务已启动')
+  } catch(e) {
+    log.className = 'crawl-log err'
+    log.textContent = '✗ 触发失败'
+  }
+}
+
+/* 加载失败记录数量 */
+async function loadFailedCounts() {
+  for (const type of [25, 26, 24]) {
+    try {
+      const j = await get(`${API}/crawler/failed/${type}`)
+      const count = j.data || 0
+      const el = document.getElementById(`failedCount${type}`)
+      el.textContent = count > 0 ? `${count} 条失败` : '无失败记录'
+      el.className = `retry-count ${count > 0 ? 'has-data' : ''}`
+    } catch(e) {}
+  }
+}
+
+/* 触发重试 */
+async function retryFailed(type) {
+  const log = document.getElementById('crawlLog')
+  const typeName = type === 25 ? '日本动漫' : type === 26 ? '欧美动漫' : '中国动漫'
+  log.className = 'crawl-log loading'
+  log.textContent = `正在触发 ${typeName} 重试…`
+  try {
+    const j = await fetch(`${API}/crawler/retry/${type}`, { method:'POST' }).then(r=>r.json())
+    log.className = 'crawl-log ok'
+    log.textContent = '✓ ' + (j.data || '重试任务已启动')
+    // 刷新失败数量
+    setTimeout(loadFailedCounts, 1000)
+  } catch(e) {
+    log.className = 'crawl-log err'
+    log.textContent = '✗ 触发失败'
+  }
+}
+
+async function loadDbStats() {
+  try {
+    const [sj, uj] = await Promise.all([
+      get(`${API}/api/anime/stats`),
+      getAuth(`${API}/api/user/count`)
+    ])
+    const s = sj.data
+    document.getElementById('dbStats').innerHTML = `
+      <tr><td>anime（番剧表）</td>
+          <td><strong style="color:#fff">${(s.totalAnime||0).toLocaleString()}</strong></td>
+          <td style="color:var(--sub)">全部番剧（已下线除外）</td></tr>
+      <tr><td style="padding-left:24px">└ 日本动漫</td>
+          <td>${(s.jpCount||0).toLocaleString()}</td>
+          <td style="color:var(--sub)">type=25</td></tr>
+      <tr><td style="padding-left:24px">└ 欧美动漫</td>
+          <td>${(s.usCount||0).toLocaleString()}</td>
+          <td style="color:var(--sub)">type=26</td></tr>
+      <tr><td style="padding-left:24px">└ 中国动漫</td>
+          <td>${(s.cnCount||0).toLocaleString()}</td>
+          <td style="color:var(--sub)">type=24</td></tr>
+      <tr><td>anime 总播放量</td>
+          <td>${(s.totalView||0).toLocaleString()}</td>
+          <td style="color:var(--sub)">所有番剧 view_count 之和</td></tr>
+      <tr><td>user（用户表）</td>
+          <td>${uj.code===200 ? uj.data : '—'}</td>
+          <td style="color:var(--sub)">注册用户数</td></tr>`
+  } catch(e) {}
+}
+
+/* ── HTTP 工具 ── */
+async function get(url) {
+  const r = await fetch(url)
+  return r.json()
+}
+async function getAuth(url) {
+  const r = await fetch(url, { headers:{ 'Authorization':'Bearer '+token } })
+  return r.json()
+}
+
+loadDashboard()
+</script>
+</body>
+</html>
