@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const http = axios.create({
-  baseURL: 'http://159.223.81.85:8080',
+  baseURL: 'https://www.animeparadise.vip/api',
   timeout: 10000,
 })
 
