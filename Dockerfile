@@ -24,8 +24,11 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # 从构建阶段复制构建产物到 nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# 暴露 80 端口
-EXPOSE 80
+# 复制 admin 目录到容器
+COPY admin /usr/share/nginx/html/admin
+
+# 暴露 80 和 5173 端口
+EXPOSE 80 5173
 
 # 启动 nginx
 CMD ["nginx", "-g", "daemon off;"]
