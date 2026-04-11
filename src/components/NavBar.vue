@@ -2,13 +2,7 @@
   <nav class="nav">
     <!-- Logo -->
     <RouterLink to="/" class="nav-logo">
-      <div class="nav-logo-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#fff" opacity="0.95"/>
-          <path d="M2 17l10 5 10-5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.75"/>
-          <path d="M2 12l10 5 10-5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
+      <img src="@/assets/logo.png" alt="logo" class="nav-logo-img" />
       {{ t.siteName }}
     </RouterLink>
 
@@ -186,4 +180,6 @@ function selectLang(val) {
 .lang-item:hover { background: var(--bg3); color: var(--accent2); }
 .lang-item.active { color: var(--accent2); font-weight: 700; }
 .lang-check { margin-left: auto; color: var(--accent); font-weight: 900; font-size: 14px; }
+
+.nav-logo-img { width: 64px; height: 64px; object-fit: contain; filter: brightness(1.2) drop-shadow(0 0 8px rgba(196,113,237,0.6)); }
 </style>

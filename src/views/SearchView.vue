@@ -21,13 +21,16 @@
             </div>
           </template>
           <div v-else-if="defaultError" class="empty"><div class="et">{{ t.loadFail }}</div></div>
-          <AnimeCard v-else v-for="a in defaultList" :key="a.id" :anime="a" />
+          <template v-else>
+            <AnimeCard v-for="a in defaultList" :key="a.id" :anime="a" />
+          </template>
         </div>
       </div>
     </template>
 
     <template v-else>
-      <div class="grid">
+      <div class="sec">
+      <div class="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:16px;">
         <template v-if="searchLoading">
           <div v-for="i in 24" :key="i" class="sk">
             <div class="sh sk-cv" /><div class="sh sk-ln" style="width:82%" /><div class="sh sk-ln" style="width:50%" />
@@ -41,7 +44,10 @@
           <div class="et">{{ t.noResult1 }}{{ keyword }}{{ t.noResult2 }}</div>
           <div class="es">{{ t.tryOther }}</div>
         </div>
-        <AnimeCard v-else v-for="a in resultList" :key="a.id" :anime="a" />
+        <template v-else>
+          <AnimeCard v-for="a in resultList" :key="a.id" :anime="a" />
+        </template>
+      </div>
       </div>
       <Pager :current="curPage" :pages="totalPages" @change="onPageChange" />
     </template>

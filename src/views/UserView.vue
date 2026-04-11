@@ -186,8 +186,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page { max-width:1200px; margin:0 auto; padding:32px 28px 60px; display:flex; gap:28px; align-items:flex-start; }
-.sidebar { width:224px; flex-shrink:0; }
+.page { max-width:1200px; margin:0; padding:32px 28px 60px; display:flex; gap:28px; align-items:flex-start; }
+.sidebar { width:260px; flex-shrink:0; }
 .profile-card { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; padding:26px 20px; text-align:center; margin-bottom:12px; }
 .avatar-big { width:72px; height:72px; border-radius:50%; margin:0 auto 12px; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 0 24px var(--glow); }
 .profile-name { font-size:16px; font-weight:800; color:var(--text); margin-bottom:4px; }
@@ -212,7 +212,7 @@ onMounted(() => {
 .panel-title::before { content:''; width:4px; height:18px; background:linear-gradient(to bottom,var(--accent),var(--accent2)); border-radius:2px; }
 .panel-action { font-size:12px; color:var(--sub); cursor:pointer; padding:5px 13px; border-radius:8px; border:1.5px solid var(--border); background:none; font-family:inherit; transition:all .18s; font-weight:600; }
 .panel-action:hover { border-color:var(--accent); color:var(--accent2); background:rgba(124,92,252,.08); }
-.info-form { background:var(--bg2); border:1px solid var(--border2); border-radius:14px; padding:26px; }
+.info-form { max-width: 480px; background:var(--bg2); border:1px solid var(--border2); border-radius:14px; padding:26px; }
 .form-row { margin-bottom:20px; }
 .form-label { font-size:12px; color:var(--sub); margin-bottom:7px; font-weight:700; letter-spacing:.4px; }
 .form-val { font-size:14px; color:var(--text); background:var(--bg3); border:1.5px solid var(--border); border-radius:10px; padding:11px 15px; font-weight:500; }

@@ -54,8 +54,15 @@
         </div>
 
         <div class="hero-thumbs">
-          <div v-for="(item, i) in heroList" :key="item.id" class="hero-thumb" :class="{ on: i === heroIdx }" @click="goHero(i)">
+          <div
+              v-for="(item, i) in heroList"
+              :key="item.id"
+              class="hero-thumb"
+              :class="{ on: i === heroIdx }"
+              @click="goHero(i)"
+          >
             <img :src="item.coverImage" alt="" />
+            <div class="hero-thumb-overlay" />
           </div>
         </div>
       </div>

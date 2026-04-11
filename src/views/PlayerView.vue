@@ -435,8 +435,8 @@ onUnmounted(() => {
 
 <style scoped>
 .player-page { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-.nav { flex-shrink:0; height:52px; padding:0 24px; background:rgba(10,10,18,.95); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; z-index:500; }
-.nav-logo { display:flex; align-items:center; gap:7px; text-decoration:none; font-size:16px; font-weight:700; color:#fff; flex-shrink:0; }
+.nav { flex-shrink:0; height:52px; padding:0 24px; .nav { flex-shrink:0; height:52px; padding:0 24px; background:var(--nav-bg); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; z-index:500; }; backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; z-index:500; }
+.nav-logo { display:flex; align-items:center; gap:7px; text-decoration:none; font-size:16px; font-weight:700; color:var(--text); flex-shrink:0; }
 .nav-logo-icon { width:26px; height:26px; border-radius:6px; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:13px; }
 .nav-sep { color:var(--border); font-size:18px; flex-shrink:0; }
 .nav-back { color:var(--sub); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:4px; transition:color .18s; flex-shrink:0; }
@@ -502,7 +502,7 @@ onUnmounted(() => {
 .dm-hint { font-size:11px; color:var(--sub); margin-top:6px; min-height:16px; transition:color .2s; }
 .sidebar { width:260px; flex-shrink:0; border-left:1px solid var(--border); background:var(--bg2); display:flex; flex-direction:column; overflow:hidden; }
 .sb-head { flex-shrink:0; padding:14px 16px 10px; border-bottom:1px solid var(--border); }
-.sb-head h3 { font-size:14px; font-weight:700; color:#fff; margin-bottom:8px; }
+.sb-head h3 { font-size:14px; font-weight:700; color:var(--text); margin-bottom:8px; }
 .ep-tabs { display:flex; gap:5px; flex-wrap:wrap; }
 .ep-tab { background:var(--bg3); border:1px solid var(--border); color:var(--sub); padding:3px 10px; border-radius:5px; font-size:11px; cursor:pointer; transition:all .15s; }
 .ep-tab:hover { border-color:var(--accent); color:var(--text); }

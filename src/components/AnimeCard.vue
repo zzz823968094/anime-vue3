@@ -31,3 +31,8 @@ const statusLabel = computed(() => props.anime.status === 1 ? ` · ${t.value.ser
 
 function goDetail() { router.push(`/detail/${props.anime.id}`) }
 </script>
+<style scoped>
+.gcard {
+  width: 100%;
+}
+</style>
