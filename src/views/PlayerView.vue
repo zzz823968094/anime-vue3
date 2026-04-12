@@ -443,7 +443,7 @@ function connectDm(vid) {
   ws?.close()
   historyDanmaku = []
   try {
-    ws = new WebSocket(`ws://159.223.81.85:8080/ws/danmaku/${vid}`)
+    ws = new WebSocket(`ws://https://www.animeparadise.vip/ws/danmaku/${vid}`)
     ws.onopen = () => { dmHint.value = ''; dmHintColor.value = '' }
     ws.onmessage = e => {
       try {
