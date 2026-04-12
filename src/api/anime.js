@@ -83,6 +83,8 @@ export const authApi = {
 /* ── 訪問上報 ── */
 export const visitApi = {
   report(page) {
+    // 未登录直接跳过，不发请求
+    if (!localStorage.getItem('ms_token')) return
     http.post('/api/anime/visit', { page }).catch(() => {})
   },
 }
