@@ -21,7 +21,7 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/wss': {
-        target: 'wss://www.animeparadise.vip/wss/',
+        target: 'wss://www.animeparadise.vip/ws/',
         ws: true,
         changeOrigin: true,
         secure: false,

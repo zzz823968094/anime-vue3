@@ -425,6 +425,7 @@ select.ctrl option{background:var(--bg3);}
 
 <script>
 const API   = 'https://lsj.animeparadise.vip'
+// const API   = 'http://localhost:8080'
 const token = localStorage.getItem('ms_token')
 let animePage = 1
 
@@ -748,7 +749,7 @@ async function crawl(endpoint) {
   log.className = 'crawl-log loading'
   log.textContent = '正在触发任务…'
   try {
-    const j = await fetch(`${API}/crawler/${endpoint}`, { method:'POST' }).then(r=>r.json())
+    const j = await fetch(`${API}/api/crawler/${endpoint}`, { method:'POST' }).then(r=>r.json())
     log.className = 'crawl-log ok'
     log.textContent = '✓ ' + (j.data || '任务已启动（后台运行）')
   } catch(e) {
@@ -763,7 +764,7 @@ async function crawlIncremental(type) {
   log.className = 'crawl-log loading'
   log.textContent = `正在触发 ${typeName} 增量爬取…`
   try {
-    const j = await fetch(`${API}/crawler/incremental/${type}`, { method:'POST' }).then(r=>r.json())
+    const j = await fetch(`${API}/api/crawler/incremental/${type}`, { method:'POST' }).then(r=>r.json())
     log.className = 'crawl-log ok'
     log.textContent = '✓ ' + (j.data || '任务已启动')
   } catch(e) {
@@ -777,7 +778,7 @@ async function crawlSync(type) {
   log.className = 'crawl-log loading'
   log.textContent = '正在触发任务…'
   try {
-    const j = await fetch(`${API}/crawler/sync/${type}`, { method:'POST' }).then(r=>r.json())
+    const j = await fetch(`${API}/api/crawler/sync/${type}`, { method:'POST' }).then(r=>r.json())
     log.className = 'crawl-log ok'
     log.textContent = '✓ ' + (j.data || '任务已启动')
   } catch(e) {
@@ -790,7 +791,7 @@ async function crawlSync(type) {
 async function loadFailedCounts() {
   for (const type of [25, 26, 24]) {
     try {
-      const j = await get(`${API}/crawler/failed/${type}`)
+      const j = await get(`${API}/api/crawler/failed/${type}`)
       const count = j.data || 0
       const el = document.getElementById(`failedCount${type}`)
       el.textContent = count > 0 ? `${count} 条失败` : '无失败记录'
@@ -806,7 +807,7 @@ async function retryFailed(type) {
   log.className = 'crawl-log loading'
   log.textContent = `正在触发 ${typeName} 重试…`
   try {
-    const j = await fetch(`${API}/crawler/retry/${type}`, { method:'POST' }).then(r=>r.json())
+    const j = await fetch(`${API}/api/crawler/retry/${type}`, { method:'POST' }).then(r=>r.json())
     log.className = 'crawl-log ok'
     log.textContent = '✓ ' + (j.data || '重试任务已启动')
     // 刷新失败数量
