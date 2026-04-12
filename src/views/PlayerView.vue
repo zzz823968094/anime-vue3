@@ -443,7 +443,10 @@ function connectDm(vid) {
   ws?.close()
   historyDanmaku = []
   try {
-    ws = new WebSocket(`ws://www.animeparadise.vip/api/ws/danmaku/${vid}`)
+    // 使用相对路径，通过代理连接 WebSocket
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const wsUrl = `${wsProtocol}//${window.location.host}/wss/danmaku/${vid}`
+    ws = new WebSocket(wsUrl)
     ws.onopen = () => { dmHint.value = ''; dmHintColor.value = '' }
     ws.onmessage = e => {
       try {

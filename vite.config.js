@@ -15,6 +15,17 @@ export default defineConfig({
         target: 'https://www.animeparadise.vip',
         changeOrigin: true,
       },
+      '/ws': {
+        target: 'ws://www.animeparadise.vip/ws/',
+        ws: true,
+        changeOrigin: true,
+      },
+      '/wss': {
+        target: 'wss://www.animeparadise.vip/wss/',
+        ws: true,
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 })
