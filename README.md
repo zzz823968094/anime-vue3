@@ -105,7 +105,6 @@ docker-compose up -d
 
 服务启动后将提供：
 - 主应用: http://localhost:3000
-- 管理后台: http://localhost:3001
 
 ## 目录说明
 

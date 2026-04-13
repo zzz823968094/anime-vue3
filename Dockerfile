@@ -26,11 +26,8 @@ RUN npm install -g serve
 # 从构建阶段复制构建产物
 COPY --from=builder /app/dist ./dist
 
-# 复制 admin 目录
-COPY admin ./admin
-
-# 暴露 3000 端口 (主站) 和 3001 端口 (管理后台)
-EXPOSE 3000 3001
+# 暴露 3000 端口 (主站)
+EXPOSE 3000
 
 # 启动 serve 服务
-CMD ["sh", "-c", "serve -s dist -l 3000 & serve -s admin -l 3001"]
+CMD ["sh", "-c", "serve -s dist -l 3000"]

@@ -100,8 +100,7 @@ docker-compose up -d
 ```
 
 After startup, services will be available at:
-- Main App: http://localhost:3000  
-- Admin Panel: http://localhost:3001  
+- Main App: http://localhost:3000
 
 ## Directory Overview
 

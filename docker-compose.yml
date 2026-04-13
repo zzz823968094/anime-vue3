@@ -6,7 +6,6 @@ services:
     container_name: anime-vue3-app
     ports:
       - "3000:3000"
-      - "3001:3001"
     restart: unless-stopped
     networks:
       - anime-network
