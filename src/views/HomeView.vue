@@ -213,3 +213,61 @@ function loadMore() { if (listPage.value < listPages.value) loadList(listPage.va
 onMounted(() => { loadHero(); loadHot(); loadList() })
 onUnmounted(() => clearInterval(heroTimer))
 </script>
+<style scoped>
+/* ── 手机端适配（加到 HomeView.vue 的 style 里） ── */
+
+@media (max-width: 768px) {
+  /* Hero */
+  .hero { height: auto; min-height: 280px; }
+
+  .hero-content {
+    flex-direction: column;
+    padding: 16px;
+    gap: 0;
+  }
+
+  .hero-slide-area { height: auto; }
+
+  .hero-slide {
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 32px;
+  }
+
+  .hero-cover {
+    width: 120px; height: 168px;
+    transform: none !important;
+    margin: 0 auto;
+  }
+
+  .hero-info { text-align: center; }
+
+  .hero-title { font-size: 18px; white-space: normal; }
+
+  .hero-tags { justify-content: center; }
+
+  .hero-desc { display: none; }
+
+  .hero-btns { justify-content: center; }
+
+  .btn-watch { padding: 8px 18px; font-size: 13px; }
+  .btn-detail { padding: 8px 14px; font-size: 13px; }
+
+  /* 隐藏右侧缩略图 */
+  .hero-thumbs { display: none; }
+
+  /* Tabs */
+  .tabs-inner { gap: 0; overflow-x: auto; }
+  .tab { padding: 0 12px; font-size: 12px; flex-shrink: 0; }
+
+  /* Main */
+  .main { padding: 16px 12px 40px; }
+
+  /* Grid */
+  .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+
+  /* Hot strip */
+  .hcard { width: 110px; }
+  .hcard .cv { width: 110px; height: 154px; }
+}
+</style>

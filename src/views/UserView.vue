@@ -242,4 +242,34 @@ onMounted(() => {
 .empty-state a { display:inline-block; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; text-decoration:none; padding:9px 22px; border-radius:18px; font-size:13px; font-weight:700; box-shadow:0 4px 14px var(--glow); }
 .sk .sk-cv { width:100%; aspect-ratio:3/4; border-radius:10px; margin-bottom:7px; }
 .sk .sk-ln { height:11px; border-radius:4px; margin-bottom:4px; }
+@media (max-width: 768px) {
+  .page { flex-direction: column; padding: 16px 12px 40px; gap: 16px; }
+  .sidebar { width: 100%; }
+  .profile-card { padding: 20px 16px; }
+  .side-menu {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .side-item {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 6px;
+    font-size: 11px;
+    border-left: none !important;
+    border-top: none !important;
+    border-bottom: 3px solid transparent;
+    width: 100%;
+    justify-content: center;
+  }
+  .side-item.on {
+    border-bottom-color: var(--accent);
+  }
+  .side-item .icon { font-size: 20px; }
+  .content { width: 100%; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  .info-form { max-width: 100%; padding: 16px; }
+}
 </style>
