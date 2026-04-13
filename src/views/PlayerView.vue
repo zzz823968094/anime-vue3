@@ -601,4 +601,17 @@ onUnmounted(() => {
 .ep-item.on { background:rgba(124,106,247,.14); color:var(--accent2); font-weight:600; }
 .ep-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); flex-shrink:0; }
 .ep-watched { width:5px; height:5px; border-radius:50%; background:var(--sub); opacity:.5; flex-shrink:0; }
+@media (max-width: 768px) {
+  .player-page { height: auto; overflow: auto; }
+  .body { flex-direction: column; overflow: visible; }
+  .spacer { display: none; }
+  .center { overflow: visible; }
+  .sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border); height: auto; max-height: 300px; }
+  .sb-scroll { max-height: 240px; }
+  .ep-page.on { flex-direction: row; flex-wrap: wrap; gap: 6px; padding: 8px; }
+  .ep-item { width: auto; padding: 6px 12px; }
+  .nav { gap: 8px; padding: 0 12px; }
+  .nav-info { display: none; }
+  .nav-back { font-size: 12px; }
+}
 </style>

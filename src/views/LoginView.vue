@@ -136,7 +136,7 @@ async function doLogin() {
     } else {
       showMsg(res.message || 'Error', 'err')
     }
-  } catch { showMsg('Network error', 'err') }
+  } catch { showMsg('账号密码错误，请检查后重试', 'err') }
   finally { submitting.value = false }
 }
 
@@ -238,4 +238,10 @@ async function doRegister() {
 .back { text-align: center; margin-top: 18px; font-size: 13px; color: var(--sub); }
 .back a { color: var(--accent2); text-decoration: none; transition: color .18s; font-weight: 600; }
 .back a:hover { color: var(--text); }
+@media (max-width: 768px) {
+  .container { flex-direction: column; width: 100%; min-height: 100vh; border-radius: 0; }
+  .left { width: 100%; padding: 28px 24px; }
+  .left-features { display: none; }
+  .right { padding: 28px 24px; }
+}
 </style>

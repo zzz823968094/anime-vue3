@@ -526,4 +526,14 @@ body {
 ══════════════════════════════════════════ */
 .dm-item{position:absolute;white-space:nowrap;font-size:22px;font-weight:700;text-shadow:1px 1px 3px rgba(0,0,0,.9),-1px -1px 3px rgba(0,0,0,.9);animation:dm-fly linear forwards;pointer-events:none;}
 @keyframes dm-fly{from{transform:translateX(0)}to{transform:translateX(calc(-100% - 100vw))}}
+@media (max-width: 768px) {
+  .hero { display: none; }
+  .hero-inner { flex-direction: column; padding: 16px; gap: 20px; }
+  .cover-card { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .cover-card img, .cover-card .nc { width: 160px; height: 224px; }
+  .info-wrap { width: 100%; padding-top: 0; }
+  .anime-title { font-size: 20px; }
+  .action-row { flex-wrap: wrap; }
+  .btn-play, .btn-fav { width: 100%; justify-content: center; }
+}
 </style>
