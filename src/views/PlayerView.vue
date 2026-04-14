@@ -381,7 +381,12 @@ function triggerAutoNext() {
 function confirmNext() {
   clearInterval(autoNextTimer)
   showAutoNext.value = false
-  if (nextVideo.value) go(nextVideo.value)
+  if (nextVideo.value) {
+    go(nextVideo.value)
+    setTimeout(() => {
+      if (videoEl.value) videoEl.value.play()
+    }, 1500)
+  }
 }
 function cancelNext() {
   clearInterval(autoNextTimer)
@@ -503,13 +508,37 @@ function sendDm() {
 // ── 生命周期 ──
 const handleGlobalClick = () => { dropOpen.value = false }
 
+function handleKeydown(e) {
+  if (!videoEl.value) return
+  if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    videoEl.value.volume = Math.min(1, +(videoEl.value.volume + 0.1).toFixed(1))
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    videoEl.value.volume = Math.max(0, +(videoEl.value.volume - 0.1).toFixed(1))
+  }
+}
+
+function handleOrientationChange() {
+  if (!videoEl.value) return
+  if (screen.orientation?.angle === 90 || screen.orientation?.angle === 270) {
+    videoEl.value.requestFullscreen?.()
+  } else {
+    if (document.fullscreenElement) document.exitFullscreen?.()
+  }
+}
+
 onMounted(() => {
   loadFull()
   document.addEventListener('click', handleGlobalClick)
+  document.addEventListener('keydown', handleKeydown)
+  window.addEventListener('orientationchange', handleOrientationChange)
+  window.removeEventListener('orientationchange', handleOrientationChange)
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleGlobalClick)
+  document.removeEventListener('keydown', handleKeydown)
   clearInterval(autoNextTimer)
   ws?.close()
   if (hls) { hls.destroy(); hls = null }
