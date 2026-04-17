@@ -46,6 +46,12 @@
               @seeked="onSeeked"
           />
 
+          <!-- 加载中遮罩 -->
+          <div class="loading-overlay" :class="{ show: isLoading }">
+            <div class="loading-spinner" />
+            <div class="loading-text">正在加载...</div>
+          </div>
+
           <!-- 弹幕飘动层 -->
           <div class="dm-layer" ref="dmLayer" />
 
@@ -157,6 +163,9 @@ const animeId   = computed(() => route.query.animeId)
 const videoId   = computed(() => route.query.videoId)
 const currentEp = computed(() => parseInt(route.query.ep || '1'))
 
+// ── 加载状态 ──
+const isLoading = ref(false)
+
 // ── 数据 ──
 const animeTitle = ref('')
 const totalEp    = ref(0)
@@ -212,9 +221,18 @@ const curIdx       = computed(() => allVideos.value.findIndex(v => v.episode ===
 const prevDisabled = computed(() => curIdx.value <= 0)
 const nextDisabled = computed(() => curIdx.value < 0 || curIdx.value >= allVideos.value.length - 1)
 
+// 从存储的URL中提取真实m3u8地址（爬虫存的是 https://hhzyjiexi.com/play/?url=<真实地址>）
+function extractM3u8Url(stored) {
+  if (!stored) return stored
+  const match = stored.match(/[?&]url=(.+)/)
+  return match ? decodeURIComponent(match[1]) : stored
+}
+
 // ── 初始化 HLS 播放器 ──
 function initPlayer(url) {
-  if (!url || !videoEl.value) return
+  const realUrl = extractM3u8Url(url)
+  if (!realUrl || !videoEl.value) return
+  url = realUrl
   // 销毁旧实例
   if (hls) { hls.destroy(); hls = null }
 
@@ -290,6 +308,7 @@ function checkDanmakuQueue(currentTime) {
 // ── 加载数据 ──
 async function loadFull() {
   if (!animeId.value || !videoId.value) { router.push('/'); return }
+  isLoading.value = true
   try {
     const [ar, vr, vidR] = await Promise.all([
       animeApi.getDetail(animeId.value),
@@ -300,40 +319,46 @@ async function loadFull() {
     allVideos.value  = vr.data || []
     const video = vidR.data
 
-    animeTitle.value = anime.title
-    totalEp.value    = anime.currentEpisode
+    animeTitle.value = anime.vodName
+    totalEp.value    = anime.vodTotal
     m3u8Url.value    = video.m3u8Url
-    document.title   = `${anime.title} - ${t.value.siteName}`
+    document.title   = `${anime.vodName} - ${t.value.siteName}`
 
     await nextTick()
     initPlayer(video.m3u8Url)
-    saveWatchHistory({ animeId: animeId.value, title: anime.title, episode: currentEp.value, videoId: videoId.value, coverImage: anime.coverImage || '' })
+    saveWatchHistory({ animeId: animeId.value, title: anime.vodName, episode: currentEp.value, videoId: videoId.value, coverImage: anime.vodPic || '' })
     updateNextVideo()
     scrollToCurrentEp()
     connectDm(videoId.value)
   } catch (e) {
     console.error('载入失败', e)
+  } finally {
+    isLoading.value = false
   }
 }
 
 async function loadVideo() {
-  if (!videoId.value) return
+  const ep = currentEp.value
+  const video = allVideos.value.find(v => v.episode === ep)
+  if (!video) return
+  isLoading.value = true
   try {
     ws?.close()
     historyDanmaku = []
 
-    const res = await videoApi.getOne(videoId.value)
-    m3u8Url.value = res.data.m3u8Url
+    m3u8Url.value = video.m3u8Url
     document.title = `${animeTitle.value} - ${t.value.siteName}`
 
     await nextTick()
-    initPlayer(res.data.m3u8Url)
-    saveWatchHistory({ animeId: animeId.value, title: animeTitle.value, episode: currentEp.value, videoId: videoId.value, coverImage: '' })
+    initPlayer(video.m3u8Url)
+    saveWatchHistory({ animeId: animeId.value, title: animeTitle.value, episode: ep, videoId: video.id, coverImage: '' })
     updateNextVideo()
     scrollToCurrentEp()
-    connectDm(videoId.value)
+    connectDm(video.id)
   } catch (e) {
     console.error('切换集数失败', e)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -353,10 +378,14 @@ function scrollToCurrentEp() {
 }
 
 watch(
-    () => route.query.videoId,
-    (newId, oldId) => {
-      if (!newId || oldId === undefined) return
-      loadVideo()
+    () => [route.query.animeId, route.query.ep],
+    ([newAnimeId, newEp], [oldAnimeId, oldEp]) => {
+      if (!oldAnimeId || !oldEp) return
+      if (newAnimeId !== oldAnimeId) {
+        loadFull()
+      } else if (newEp !== oldEp) {
+        loadVideo()
+      }
     }
 )
 
@@ -510,12 +539,23 @@ const handleGlobalClick = () => { dropOpen.value = false }
 
 function handleKeydown(e) {
   if (!videoEl.value) return
+  const tag = document.activeElement?.tagName
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return
   if (e.key === 'ArrowUp') {
     e.preventDefault()
     videoEl.value.volume = Math.min(1, +(videoEl.value.volume + 0.1).toFixed(1))
   } else if (e.key === 'ArrowDown') {
     e.preventDefault()
     videoEl.value.volume = Math.max(0, +(videoEl.value.volume - 0.1).toFixed(1))
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault()
+    videoEl.value.currentTime = Math.max(0, videoEl.value.currentTime - 5)
+  } else if (e.key === 'ArrowRight') {
+    e.preventDefault()
+    videoEl.value.currentTime = Math.min(videoEl.value.duration || 0, videoEl.value.currentTime + 5)
+  } else if (e.key === ' ') {
+    e.preventDefault()
+    videoEl.value.paused ? videoEl.value.play() : videoEl.value.pause()
   }
 }
 
@@ -595,6 +635,11 @@ onUnmounted(() => {
 .toggle-thumb { width:12px; height:12px; border-radius:50%; background:var(--sub); position:absolute; top:2px; left:2px; transition:transform .2s,background .2s; }
 .auto-toggle input:checked + .toggle-track { background:var(--accent); border-color:var(--accent); }
 .auto-toggle input:checked + .toggle-track .toggle-thumb { transform:translateX(14px); background:#fff; }
+.loading-overlay { position:absolute; inset:0; background:rgba(0,0,0,.7); display:none; flex-direction:column; align-items:center; justify-content:center; gap:14px; z-index:20; }
+.loading-overlay.show { display:flex; }
+.loading-spinner { width:48px; height:48px; border:4px solid rgba(255,255,255,.15); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite; }
+.loading-text { font-size:13px; color:rgba(255,255,255,.7); }
+@keyframes spin { to { transform:rotate(360deg) } }
 .dm-layer { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:5; }
 .dm-item { position:absolute; white-space:nowrap; font-size:22px; font-weight:600; text-shadow:1px 1px 2px rgba(0,0,0,.8),-1px -1px 2px rgba(0,0,0,.8); animation:dm-fly linear forwards; pointer-events:none; }
 @keyframes dm-fly { from{transform:translateX(0)} to{transform:translateX(calc(-100% - 100vw))} }
