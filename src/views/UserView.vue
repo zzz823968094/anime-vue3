@@ -55,14 +55,14 @@
         <div v-else class="grid">
           <div v-for="item in favList" :key="item.id" class="gcard" @click="$router.push(`/detail/${item.id}`)">
             <div class="cv">
-              <img v-if="item.coverImage" :src="item.coverImage" loading="lazy" />
+              <img v-if="item.vodPic" :src="item.vodPic" loading="lazy" />
               <div v-else class="nc">🎌</div>
               <div class="ov" /><div class="pi">▶</div>
-              <span class="ep-tag">{{ t.epLabel }}{{ item.currentEpisode || '?' }}{{ t.epSuffix }}</span>
+              <span class="ep-tag">{{ t.epLabel }}{{ item.vodTotal || '?' }}{{ t.epSuffix }}</span>
               <button class="rm-btn" @click.stop="removeFav(item.id)">✕</button>
             </div>
-            <div class="ct" :title="item.title">{{ item.title || t.loadFail }}</div>
-            <div class="cs">{{ item.year || '' }}{{ item.status === 1 ? ` · ${t.serializing2}` : ` · ${t.finished2}` }}</div>
+            <div class="ct" :title="item.vodName">{{ item.vodName || t.loadFail }}</div>
+            <div class="cs">{{ item.vodYear || '' }}{{ item.vodIsend === 0 ? ` · ${t.serializing2}` : ` · ${t.finished2}` }}</div>
           </div>
         </div>
       </div>
@@ -82,14 +82,14 @@
           <div v-for="item in histList" :key="item.animeId" class="gcard"
             @click="$router.push(`/player?animeId=${item.animeId}&videoId=${item.videoId}&ep=${item.episode}`)">
             <div class="cv">
-              <img v-if="item.coverImage" :src="item.coverImage" loading="lazy" />
+              <img v-if="item.vodPic" :src="item.vodPic" loading="lazy" />
               <div v-else class="nc">🎌</div>
               <div class="ov" /><div class="pi">▶</div>
-              <span class="ep-tag">{{ t.epLabel }}{{ item.episode }}{{ t.epSuffix }}</span>
+              <span class="ep-tag">{{ t.epLabel }}{{ item.vodTotal }}{{ t.epSuffix }}</span>
               <button class="rm-btn" @click.stop="removeHistory(item.animeId)">✕</button>
             </div>
-            <div class="ct" :title="item.title">{{ item.title }}</div>
-            <div class="cs">{{ t.watchedTo }} {{ item.episode }}</div>
+            <div class="ct" :title="item.vodName">{{ item.vodName }}</div>
+            <div class="cs">{{ t.watchedTo }} {{ item.vodTotal }}</div>
             <div class="prog-bar"><div class="prog-fill" :style="{ width: (item.progress || 0) + '%' }" /></div>
           </div>
         </div>
