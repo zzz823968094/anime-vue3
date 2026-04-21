@@ -135,8 +135,7 @@
           <div v-else v-for="a in animeList" :key="a.id" class="gcard" @click="$router.push(`/detail/${a.id}`)">
             <div class="cv">
               <img v-if="a.vodPic" :src="a.vodPic" loading="lazy"/>
-              <div v-else
-                   style="width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:32px">
+              <div v-else                   style="width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:32px">
                 🎌
               </div>
               <div class="ov"/>
@@ -147,7 +146,7 @@
                 {{ a.vodIsend === 0 ? t.serializing2 : t.finished2 }}
               </span>
             </div>
-            <div class="ct" :title="a.title">{{ a.title }}</div>
+            <div class="ct" :title="a.vodName">{{ a.vodName }}</div>
             <div class="cs">{{ TYPE_MAP[a.typeId] || '' }}{{
                 a.typeId ? ' · ' : ''
               }}{{ a.vodIsend === 0 ? t.serializing2 : t.finished2 }}
