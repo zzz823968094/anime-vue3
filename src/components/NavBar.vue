@@ -24,6 +24,11 @@
 
     <!-- 右側工具區 -->
     <div class="nav-right">
+      <!-- App 下载（桌面显示） -->
+      <RouterLink to="/download" class="icon-btn download-btn desktop-only" title="下载 App">
+        📱
+      </RouterLink>
+
       <!-- 日夜模式（桌面显示） -->
       <button class="icon-btn theme-btn desktop-only" @click="themeStore.toggle()">
         <span v-if="themeStore.isDark">☀️</span>
@@ -138,6 +143,8 @@ function selectLang(val) { i18n.setLang(val); langOpen.value = false }
 .icon-btn:hover { border-color: var(--accent); background: rgba(124,92,252,0.1); }
 
 .theme-btn { width: 36px; height: 36px; justify-content: center; font-size: 16px; }
+
+.download-btn { width: 36px; height: 36px; justify-content: center; font-size: 18px; }
 
 .lang-wrap { position: relative; }
 .lang-btn { height: 36px; padding: 0 11px; gap: 6px; font-size: 13px; font-weight: 600; }

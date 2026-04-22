@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const http = axios.create({
   baseURL: 'https://www.animeparadise.vip',
+  // baseURL: 'http://localhost:8080',
   timeout: 10000,
 })
 
@@ -86,5 +87,12 @@ export const visitApi = {
     // 未登录直接跳过，不发请求
     if (!localStorage.getItem('ms_token')) return
     http.post('/api/anime/visit', { page }).catch(() => {})
+  },
+}
+
+/* ── App 版本 ── */
+export const appVersionApi = {
+  getLatest(platform) {
+    return http.get('/api/admin/app-versions/latest', { params: { platform } })
   },
 }
