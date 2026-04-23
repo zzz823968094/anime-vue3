@@ -33,6 +33,9 @@ export const animeApi = {
   getHot(size = 20) {
     return http.get('/api/anime/recommend/hot', { params: { size } })
   },
+  getCarousel() {
+    return http.get('/api/anime/carousel/list')
+  },
   getDetail(id) {
     return http.get(`/api/anime/${id}`)
   },

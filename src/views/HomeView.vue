@@ -204,7 +204,7 @@ function restartTimer() {
 
 async function loadHero() {
   try {
-    const res = await animeApi.getHot(20)
+    const res = await animeApi.getCarousel()
     heroList.value = (res.data || []).filter(a => a.vodPic).slice(0, 5)
     if (heroList.value.length) restartTimer()
   } finally {
