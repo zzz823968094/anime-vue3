@@ -88,3 +88,22 @@ export const visitApi = {
     http.post('/api/anime/visit', { page }).catch(() => {})
   },
 }
+
+/* ── 觀看歷史 ── */
+export const historyApi = {
+  save(data) {
+    return http.post('/api/history/save', data)
+  },
+  list(limit = 100) {
+    return http.get('/api/history/list', { params: { limit } })
+  },
+  remove(animeId) {
+    return http.delete(`/api/history/${animeId}`)
+  },
+  clear() {
+    return http.delete('/api/history/clear')
+  },
+  count() {
+    return http.get('/api/history/count')
+  },
+}

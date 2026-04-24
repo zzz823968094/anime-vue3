@@ -148,7 +148,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { animeApi, videoApi } from '@/api/anime'
+import { animeApi, videoApi, historyApi } from '@/api/anime'
 import { useAuthStore } from '@/stores/auth'
 import { useI18nStore } from '@/stores/i18n'
 import Hls from 'hls.js'
@@ -211,11 +211,22 @@ const currentGroupVideos = computed(() =>
     allVideos.value.slice(activeGroup.value * EP_PAGE, (activeGroup.value + 1) * EP_PAGE)
 )
 
-// ── 已观看 ──
-const watchedEps = computed(() => {
-  const h = JSON.parse(localStorage.getItem('watchHistory') || '[]')
-  return new Set(h.filter(i => i.animeId === animeId.value).map(i => i.episode))
-})
+// ── 已觀看 ──
+const watchedEps = ref(new Set())
+
+// 載入已觀看集數（從資料庫）
+async function loadWatchedEps() {
+  if (!auth.isLoggedIn || !animeId.value) return
+  try {
+    const res = await historyApi.list(1000)
+    if (res.code === 200 && res.data) {
+      const history = res.data.filter(h => h.animeId === parseInt(animeId.value))
+      watchedEps.value = new Set(history.map(h => h.episode))
+    }
+  } catch (e) {
+    console.error('載入觀看歷史失敗', e)
+  }
+}
 
 const curIdx       = computed(() => allVideos.value.findIndex(v => v.episode === currentEp.value))
 const prevDisabled = computed(() => curIdx.value <= 0)
@@ -326,10 +337,14 @@ async function loadFull() {
 
     await nextTick()
     initPlayer(video.m3u8Url)
-    saveWatchHistory({ animeId: animeId.value, title: anime.vodName, episode: currentEp.value, videoId: videoId.value, coverImage: anime.vodPic || '' })
+    // 保存觀看歷史到資料庫
+    if (auth.isLoggedIn) {
+      saveWatchHistory({ animeId: animeId.value, vodName: anime.vodName, currentEp: currentEp.value, videoId: videoId.value, vodPic: anime.vodPic || '', vodTotal: anime.vodTotal })
+    }
     updateNextVideo()
     scrollToCurrentEp()
     connectDm(videoId.value)
+    loadWatchedEps()
   } catch (e) {
     console.error('载入失败', e)
   } finally {
@@ -432,15 +447,25 @@ function go(v) {
 function goPrev() { if (!prevDisabled.value) go(allVideos.value[curIdx.value - 1]) }
 function goNext() { if (!nextDisabled.value) go(allVideos.value[curIdx.value + 1]) }
 
-// ── 历史记录 ──
-function saveWatchHistory(item) {
+// ── 歷史記錄 ──
+async function saveWatchHistory(item) {
+  if (!auth.isLoggedIn) return
   try {
-    let h = JSON.parse(localStorage.getItem('watchHistory') || '[]')
-    h = h.filter(i => i.animeId !== item.animeId)
-    h.unshift({ ...item, ts: Date.now(), progress: 0 })
-    if (h.length > 100) h = h.slice(0, 100)
-    localStorage.setItem('watchHistory', JSON.stringify(h))
-  } catch {}
+    await historyApi.save({
+      animeId: item.animeId,
+      videoId: item.videoId,
+      episode: item.currentEp,
+      progress: item.progress || 0,
+      watchDuration: item.watchDuration || 0,
+      vodName: item.vodName,
+      vodPic: item.vodPic || '',
+      vodTotal: item.vodTotal || 0
+    })
+    // 同時更新本地的已觀看集數
+    watchedEps.value.add(item.currentEp)
+  } catch (e) {
+    console.error('保存觀看歷史失敗', e)
+  }
 }
 
 // ── 弹幕渲染 ──

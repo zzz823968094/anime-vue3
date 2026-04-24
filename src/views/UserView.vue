@@ -73,7 +73,8 @@
           <div class="panel-title">{{ t.watchHistory }}</div>
           <button class="panel-action" @click="clearHistory">{{ t.clearHistory }}</button>
         </div>
-        <div v-if="!histList.length" class="empty-state">
+        <div v-if="histLoading" style="text-align:center;padding:40px;color:var(--sub)">{{ t.loading }}</div>
+        <div v-else-if="!histList.length" class="empty-state">
           <div class="ei">🕐</div><div class="et">{{ t.noHistory }}</div>
           <div class="es">{{ t.noHistorySub }}</div>
           <RouterLink to="/">{{ t.goWatch }}</RouterLink>
@@ -89,7 +90,7 @@
               <button class="rm-btn" @click.stop="removeHistory(item.animeId)">✕</button>
             </div>
             <div class="ct" :title="item.vodName">{{ item.vodName }}</div>
-            <div class="cs">{{ t.watchedTo }} {{ item.vodTotal }}</div>
+            <div class="cs">{{ t.watchedTo }} {{ item.episode }}</div>
             <div class="prog-bar"><div class="prog-fill" :style="{ width: (item.progress || 0) + '%' }" /></div>
           </div>
         </div>
@@ -101,7 +102,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { favoriteApi, userApi, animeApi } from '@/api/anime'
+import { favoriteApi, userApi, animeApi, historyApi } from '@/api/anime'
 import { useAuthStore } from '@/stores/auth'
 import { useI18nStore } from '@/stores/i18n'
 
@@ -121,7 +122,7 @@ const favCount    = ref(null)
 const displayName = computed(() => userInfo.value?.username || auth.username || t.value.normalUser)
 const avatarChar  = computed(() => (displayName.value.charAt(0) || '👤').toUpperCase())
 const roleText    = computed(() => userInfo.value?.role === 1 ? t.value.admin : t.value.normalUser)
-const histCount   = computed(() => JSON.parse(localStorage.getItem('watchHistory') || '[]').length)
+const histCount   = ref(0)
 
 function setTab(name) {
   activeTab.value = name
@@ -135,6 +136,9 @@ async function loadProfile() {
   catch {} finally { infoLoading.value = false }
   try { const res = await favoriteApi.list(); favCount.value = (res.data || []).length }
   catch { favCount.value = null }
+  // 載入觀看歷史數量
+  try { const res = await historyApi.count(); if (res.code === 200 && res.data) histCount.value = res.data.count || 0 }
+  catch { histCount.value = 0 }
 }
 
 const favList    = ref([])
@@ -161,18 +165,41 @@ async function clearFavs() {
 }
 
 const histList = ref([])
-function loadHistory() {
-  const h = JSON.parse(localStorage.getItem('watchHistory') || '[]')
-  histList.value = [...h].sort((a, b) => (b.ts || 0) - (a.ts || 0))
+const histLoading = ref(false)
+
+async function loadHistory() {
+  histLoading.value = true
+  try {
+    const res = await historyApi.list(100)
+    if (res.code === 200 && res.data) {
+      histList.value = res.data.sort((a, b) => new Date(b.lastWatchTime) - new Date(a.lastWatchTime))
+      histCount.value = histList.value.length
+    }
+  } catch (e) {
+    console.error('載入觀看歷史失敗', e)
+    histList.value = []
+  } finally {
+    histLoading.value = false
+  }
 }
-function removeHistory(animeId) {
-  let h = JSON.parse(localStorage.getItem('watchHistory') || '[]')
-  localStorage.setItem('watchHistory', JSON.stringify(h.filter(i => i.animeId !== animeId)))
-  loadHistory()
+
+async function removeHistory(animeId) {
+  try {
+    await historyApi.remove(animeId)
+    loadHistory()
+  } catch (e) {
+    console.error('刪除觀看歷史失敗', e)
+  }
 }
-function clearHistory() {
+
+async function clearHistory() {
   if (!confirm(t.value.clearHistory + '?')) return
-  localStorage.setItem('watchHistory', '[]'); loadHistory()
+  try {
+    await historyApi.clear()
+    loadHistory()
+  } catch (e) {
+    console.error('清空觀看歷史失敗', e)
+  }
 }
 function handleLogout() { auth.logout(); router.push('/login') }
 
