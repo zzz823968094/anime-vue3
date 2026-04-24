@@ -32,6 +32,9 @@ export const animeApi = {
   getHot(size = 20) {
     return http.get('/api/anime/recommend/hot', { params: { size } })
   },
+  getCarousel() {
+    return http.get('/api/anime/carousel/list')
+  },
   getDetail(id) {
     return http.get(`/api/anime/${id}`)
   },
@@ -105,5 +108,12 @@ export const historyApi = {
   },
   count() {
     return http.get('/api/history/count')
+  },
+}
+
+/* ── App 版本 ── */
+export const appVersionApi = {
+  getLatest(platform) {
+    return http.get('/api/admin/app-versions/latest', { params: { platform } })
   },
 }
