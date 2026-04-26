@@ -12,8 +12,8 @@ RUN npm ci
 # 复制源代码
 COPY . .
 
-# 构建项目
-RUN npm run build
+# 构建项目（生产环境）
+RUN npm run build:prod
 
 # 生产阶段 - 使用 Node.js 运行 Vue 应用
 FROM node:18-alpine

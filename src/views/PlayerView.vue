@@ -151,6 +151,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { animeApi, videoApi, historyApi } from '@/api/anime'
 import { useAuthStore } from '@/stores/auth'
 import { useI18nStore } from '@/stores/i18n'
+import { WS_BASE_URL } from '@/config/env'
 import Hls from 'hls.js'
 
 const route     = useRoute()
@@ -502,9 +503,7 @@ function connectDm(vid) {
   ws?.close()
   historyDanmaku = []
   try {
-    // 使用相对路径，通过代理连接 WebSocket
-    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const wsUrl = `${wsProtocol}//${window.location.host}/ws/danmaku/${vid}`
+    const wsUrl = `${WS_BASE_URL}/ws/danmaku/${vid}`
     ws = new WebSocket(wsUrl)
     ws.onopen = () => { dmHint.value = ''; dmHintColor.value = '' }
     ws.onmessage = e => {

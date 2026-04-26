@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { API_BASE_URL } from '@/config/env'
 
 const http = axios.create({
-  baseURL: 'https://www.animeparadise.vip',
+  baseURL: API_BASE_URL,
   timeout: 10000,
 })
 
