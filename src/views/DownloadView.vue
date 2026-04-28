@@ -182,4 +182,80 @@ onMounted(fetchVersions)
   color: #475569;
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .download-page {
+    padding: 40px 16px 32px;
+  }
+  
+  .hero-icon {
+    font-size: 48px;
+  }
+  
+  .hero-title {
+    font-size: 26px;
+  }
+  
+  .hero-sub {
+    font-size: 14px;
+  }
+  
+  .cards {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .card {
+    min-width: auto;
+    max-width: none;
+    padding: 24px 20px;
+  }
+  
+  .platform-icon {
+    font-size: 36px;
+  }
+  
+  .platform-name {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .download-page {
+    padding: 32px 12px 24px;
+  }
+  
+  .hero-icon {
+    font-size: 40px;
+  }
+  
+  .hero-title {
+    font-size: 22px;
+  }
+  
+  .hero-sub {
+    font-size: 13px;
+  }
+  
+  .card {
+    padding: 20px 16px;
+  }
+  
+  .platform-icon {
+    font-size: 32px;
+  }
+  
+  .platform-name {
+    font-size: 16px;
+  }
+  
+  .release-notes {
+    font-size: 12px;
+  }
+  
+  .download-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
 </style>

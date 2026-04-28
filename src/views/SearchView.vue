@@ -116,3 +116,45 @@ watch(
   { immediate: true }
 )
 </script>
+
+<style scoped>
+@media (max-width: 768px) {
+  .main {
+    padding: 16px 12px 40px;
+  }
+  
+  .search-head h2 {
+    font-size: 16px;
+  }
+  
+  .hot-tags {
+    gap: 6px;
+  }
+  
+  .hot-tag {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-head h2 {
+    font-size: 14px;
+  }
+  
+  .hot-tag {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+</style>

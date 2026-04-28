@@ -337,6 +337,7 @@ onUnmounted(() => clearInterval(heroTimer))
   .tabs-inner {
     gap: 0;
     overflow-x: auto;
+    padding: 0 12px;
   }
 
   .tab {
@@ -364,6 +365,40 @@ onUnmounted(() => clearInterval(heroTimer))
   .hcard .cv {
     width: 110px;
     height: 154px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 240px;
+  }
+  
+  .hero-cover {
+    width: 100px;
+    height: 140px;
+  }
+  
+  .hero-title {
+    font-size: 16px;
+  }
+  
+  .btn-watch, .btn-detail {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+  
+  .hcard {
+    width: 95px;
+  }
+  
+  .hcard .cv {
+    width: 95px;
+    height: 133px;
   }
 }
 </style>

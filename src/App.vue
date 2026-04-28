@@ -374,6 +374,43 @@ body {
 }
 .sk .sk-cv  { width: 100%; aspect-ratio: 3/4; border-radius: 10px; margin-bottom: 8px; }
 .sk .sk-ln  { height: 12px; border-radius: 5px; margin-bottom: 5px; }
+
+/* ══════════════════════════════════════════
+   GLOBAL RESPONSIVE STYLES
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .main {
+    padding: 20px 12px 40px;
+  }
+  
+  .sec {
+    margin-bottom: 32px;
+  }
+  
+  .sec-title {
+    font-size: 14px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 16px 10px 32px;
+  }
+  
+  .sec {
+    margin-bottom: 24px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+}
 </style>
 
 <style>
@@ -535,5 +572,48 @@ body {
   .anime-title { font-size: 20px; }
   .action-row { flex-wrap: wrap; }
   .btn-play, .btn-fav { width: 100%; justify-content: center; }
+  
+  .detail-hero {
+    padding: 24px 0 0;
+  }
+  
+  .ep-page.on {
+    gap: 6px;
+  }
+  
+  .ep-btn {
+    width: 65px;
+    font-size: 12px;
+    padding: 6px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .cover-card img, .cover-card .nc { 
+    width: 140px; 
+    height: 196px; 
+  }
+  
+  .anime-title { 
+    font-size: 18px; 
+  }
+  
+  .tag {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+  
+  .meta {
+    font-size: 12px;
+  }
+  
+  .synopsis {
+    font-size: 12px;
+  }
+  
+  .ep-btn {
+    width: 60px;
+    font-size: 11px;
+  }
 }
 </style>

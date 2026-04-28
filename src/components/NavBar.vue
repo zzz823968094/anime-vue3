@@ -24,22 +24,22 @@
 
     <!-- 右側工具區 -->
     <div class="nav-right">
-      <!-- App 下载（桌面显示） -->
-      <RouterLink to="/download" class="icon-btn download-btn desktop-only" title="下载 App">
+      <!-- App 下载（始终显示） -->
+      <RouterLink to="/download" class="icon-btn download-btn" title="下载 App">
         📱
       </RouterLink>
 
-      <!-- 日夜模式（桌面显示） -->
-      <button class="icon-btn theme-btn desktop-only" @click="themeStore.toggle()">
-        <span v-if="themeStore.isDark">☀️</span>
+      <!-- 日夜模式（始终显示） -->
+      <button class="icon-btn theme-btn" @click="themeStore.toggle()">
+        <span v-if="themeStore.isDark">️</span>
         <span v-else>🌙</span>
       </button>
 
-      <!-- 語言切換（桌面显示） -->
-      <div class="lang-wrap desktop-only" ref="langWrap">
+      <!-- 語言切換（始终显示） -->
+      <div class="lang-wrap" ref="langWrap">
         <button class="icon-btn lang-btn" @click.stop="langOpen = !langOpen">
           <span class="lang-flag">{{ currentLangFlag }}</span>
-          <span class="lang-label">{{ currentLangLabel }}</span>
+          <span class="lang-label mobile-lang-label">{{ currentLangLabel }}</span>
           <span class="lang-arrow" :class="{ open: langOpen }">▾</span>
         </button>
         <div class="lang-drop" :class="{ on: langOpen }">
@@ -64,18 +64,6 @@
           <RouterLink to="/user">👤 &nbsp;{{ t.profile }}</RouterLink>
           <RouterLink to="/user#history">🕐 &nbsp;{{ t.history }}</RouterLink>
           <RouterLink to="/user#favorites">⭐ &nbsp;{{ t.favorites }}</RouterLink>
-          <!-- 手机端显示主题和语言切换 -->
-          <button class="mobile-only" @click="themeStore.toggle()">
-            {{ themeStore.isDark ? '☀️' : '🌙' }} &nbsp;{{ themeStore.isDark ? 'Light Mode' : 'Dark Mode' }}
-          </button>
-          <div class="mobile-lang mobile-only">
-            <button v-for="opt in langOptions" :key="opt.value"
-                    class="lang-item-mobile" :class="{ active: i18n.lang === opt.value }"
-                    @click="selectLang(opt.value)">
-              {{ opt.flag }} {{ opt.label }}
-              <span v-if="i18n.lang === opt.value">✓</span>
-            </button>
-          </div>
           <button @click="handleLogout">🚪 &nbsp;{{ t.logout }}</button>
         </div>
       </div>
@@ -177,32 +165,15 @@ function selectLang(val) { i18n.setLang(val); langOpen.value = false }
 }
 .nav-logo-text { font-size: 16px; font-weight: 700; }
 
-/* 手机端语言选项 */
-.mobile-lang { display: flex; flex-direction: column; border-top: 1px solid var(--border); margin-top: 4px; padding-top: 4px; }
-.lang-item-mobile {
-  display: flex; align-items: center; gap: 8px; width: 100%;
-  padding: 8px 10px; background: none; border: none; cursor: pointer;
-  font-family: inherit; font-size: 13px; color: var(--text);
-  border-radius: 7px; transition: background .13s; text-align: left;
-  justify-content: space-between;
-}
-.lang-item-mobile.active { color: var(--accent2); font-weight: 700; }
-.lang-item-mobile:hover { background: rgba(255,255,255,.05); }
-
 /* 响应式 */
-.desktop-only { display: flex; }
-.mobile-only  { display: none; }
-
 @media (max-width: 768px) {
-  .desktop-only { display: none !important; }
-  .mobile-only  { display: flex !important; }
-
   .nav-links { display: none; }
 
   .nav-search {
     flex: 1;
     max-width: none;
     margin: 0 8px;
+    padding: 6px 12px;
   }
 
   .nav-logo-text { display: none; }
@@ -210,5 +181,37 @@ function selectLang(val) { i18n.setLang(val); langOpen.value = false }
   .nav-logo-img { width: 32px; height: 32px; }
 
   .nav-btn { padding: 5px 10px; font-size: 12px; }
+  
+  .lang-label {
+    display: none;
+  }
+  
+  .lang-btn {
+    padding: 0 8px;
+  }
+  
+  .lang-flag {
+    font-size: 18px;
+  }
+  
+  .nav {
+    padding: 0 12px;
+    gap: 8px;
+    height: 56px;
+  }
+  
+  .nav-right {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-search input {
+    font-size: 13px;
+  }
+  
+  .nav-search button {
+    font-size: 14px;
+  }
 }
 </style>

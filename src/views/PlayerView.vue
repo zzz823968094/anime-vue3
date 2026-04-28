@@ -712,4 +712,24 @@ onUnmounted(() => {
   .nav-info { display: none; }
   .nav-back { font-size: 12px; }
 }
+
+@media (max-width: 480px) {
+  .sidebar {
+    max-height: 250px;
+  }
+  
+  .sb-scroll {
+    max-height: 200px;
+  }
+  
+  .ep-page.on {
+    gap: 4px;
+    padding: 6px;
+  }
+  
+  .ep-item {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
 </style>
