@@ -31,7 +31,7 @@
 
       <!-- 日夜模式（始终显示） -->
       <button class="icon-btn theme-btn" @click="themeStore.toggle()">
-        <span v-if="themeStore.isDark">️</span>
+        <span v-if="themeStore.isDark">☀️</span>
         <span v-else>🌙</span>
       </button>
 
@@ -130,7 +130,13 @@ function selectLang(val) { i18n.setLang(val); langOpen.value = false }
 }
 .icon-btn:hover { border-color: var(--accent); background: rgba(124,92,252,0.1); }
 
-.theme-btn { width: 36px; height: 36px; justify-content: center; font-size: 16px; }
+.theme-btn { width: 36px; height: 36px; justify-content: center; font-size: 18px; }
+
+/* 白天模式下增强按钮边框 */
+[data-theme="light"] .theme-btn {
+  border-color: rgba(108,71,251,0.3);
+  background: rgba(108,71,251,0.08);
+}
 
 .download-btn { width: 36px; height: 36px; justify-content: center; font-size: 18px; }
 
@@ -196,8 +202,9 @@ function selectLang(val) { i18n.setLang(val); langOpen.value = false }
   
   .nav {
     padding: 0 12px;
+    padding-top: env(safe-area-inset-top);
     gap: 8px;
-    height: 56px;
+    height: calc(56px + env(safe-area-inset-top));
   }
   
   .nav-right {

@@ -333,7 +333,11 @@ onUnmounted(() => clearInterval(heroTimer))
     display: none;
   }
 
-  /* Tabs */
+  /* Tabs - 添加顶部安全区域 */
+  .tabs-bar {
+    padding-top: env(safe-area-inset-top);
+  }
+
   .tabs-inner {
     gap: 0;
     overflow-x: auto;
