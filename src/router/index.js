@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { visitApi } from '@/api/anime.js'
 
 const routes = [
   { path: '/',           name: 'Home',   component: () => import('@/views/HomeView.vue') },
@@ -22,12 +21,6 @@ router.beforeEach(to => {
   if (to.meta.requiresAuth && !localStorage.getItem('ms_token')) {
     return { name: 'Login', query: { redirect: to.fullPath } }
   }
-})
-
-// 访问上报：每次路由跳转后上报当前页面，Login/User 页不统计
-router.afterEach(to => {
-  if (to.name === 'Login' || to.name === 'User') return
-  visitApi.report(to.fullPath)
 })
 
 export default router

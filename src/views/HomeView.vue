@@ -107,7 +107,7 @@
               </div>
               <div class="ov"/>
               <div class="pi">▶</div>
-              <span class="ep">{{ t.episodes }} {{a.vodTotal}} {{ t.episodesUnit }}</span>
+              <span class="ep">{{ t.episodes }} {{ a.vodTotal }} {{ t.episodesUnit }}</span>
             </div>
             <div class="ct" :title="a.vodName">{{ a.vodName }}</div>
             <div class="cs">{{
@@ -135,13 +135,14 @@
           <div v-else v-for="a in animeList" :key="a.id" class="gcard" @click="$router.push(`/detail/${a.id}`)">
             <div class="cv">
               <img v-if="a.vodPic" :src="a.vodPic" loading="lazy"/>
-              <div v-else                   style="width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:32px">
+              <div v-else
+                   style="width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:32px">
                 🎌
               </div>
               <div class="ov"/>
               <div class="pi">▶</div>
               <div v-if="a.vodScore > 0" class="score">★ {{ a.vodScore }}</div>
-              <span class="ep">{{ t.episodes }} {{a.vodTotal}} {{ t.episodesUnit }}</span>
+              <span class="ep">{{ t.episodes }} {{ a.vodTotal }} {{ t.episodesUnit }}</span>
               <span class="status-badge" :class="a.vodIsend === 1 ? 'status-on' : 'status-end'">
                 {{ a.vodIsend === 0 ? t.serializing2 : t.finished2 }}
               </span>
@@ -240,7 +241,7 @@ function setTab(type) {
 async function loadList(page = 1, append = false) {
   listLoading.value = true
   try {
-    const params = {page, size: 24, sort: 'latest'}
+    const params = {page, size: 24, sort: 'latest', sign: 'web'}
     if (activeTab.value) params.type = activeTab.value
     const res = await animeApi.getList(params)
     const records = res.data?.records || []
@@ -376,30 +377,30 @@ onUnmounted(() => clearInterval(heroTimer))
   .hero {
     min-height: 240px;
   }
-  
+
   .hero-cover {
     width: 100px;
     height: 140px;
   }
-  
+
   .hero-title {
     font-size: 16px;
   }
-  
+
   .btn-watch, .btn-detail {
     padding: 7px 14px;
     font-size: 12px;
   }
-  
+
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 10px;
   }
-  
+
   .hcard {
     width: 95px;
   }
-  
+
   .hcard .cv {
     width: 95px;
     height: 133px;
