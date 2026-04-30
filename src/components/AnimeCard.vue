@@ -2,7 +2,7 @@
   <div class="gcard" @click="goDetail">
     <div class="cv">
       <img v-if="anime.vodPic && !imgError" :src="anime.vodPic" loading="lazy" @error="imgError = true" />
-      <div v-else class="nc">🎌</div>
+      <div v-else class="nc">📺</div>
       <div class="ov" />
       <div class="pi">▶</div>
       <div v-if="anime.vodScore > 0" class="score">★ {{ anime.vodScore }}</div>

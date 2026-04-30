@@ -27,7 +27,7 @@
         <template v-else-if="anime">
           <div class="cover-card">
             <img v-if="anime.vodPic && !coverErr" :src="anime.vodPic" :alt="anime.vodName" @error="coverErr = true"/>
-            <div v-else class="nc">🎌</div>
+            <div v-else class="nc">📺</div>
             <div class="cover-badge">
               <div v-if="anime.vodScore > 0" class="badge-item"><strong>★ {{ anime.vodScore }}</strong>{{ t.vodScore }}</div>
               <div class="badge-item"><strong>{{ anime.vodTotal }}</strong>{{ t.episodeCount }}</div>

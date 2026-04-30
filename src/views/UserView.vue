@@ -56,7 +56,7 @@
           <div v-for="item in favList" :key="item.id" class="gcard" @click="$router.push(`/detail/${item.id}`)">
             <div class="cv">
               <img v-if="item.vodPic" :src="item.vodPic" loading="lazy" />
-              <div v-else class="nc">🎌</div>
+              <div v-else class="nc">📺</div>
               <div class="ov" /><div class="pi">▶</div>
               <span class="ep-tag">{{ t.epLabel }}{{ item.vodTotal || '?' }}{{ t.epSuffix }}</span>
               <button class="rm-btn" @click.stop="removeFav(item.id)">✕</button>
@@ -84,7 +84,7 @@
             @click="$router.push(`/player?animeId=${item.animeId}&videoId=${item.videoId}&ep=${item.episode}`)">
             <div class="cv">
               <img v-if="item.vodPic" :src="item.vodPic" loading="lazy" />
-              <div v-else class="nc">🎌</div>
+              <div v-else class="nc">📺</div>
               <div class="ov" /><div class="pi">▶</div>
               <span class="ep-tag">{{ t.epLabel }}{{ item.vodTotal }}{{ t.epSuffix }}</span>
               <button class="rm-btn" @click.stop="removeHistory(item.animeId)">✕</button>

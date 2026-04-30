@@ -26,8 +26,8 @@
           <div v-for="(item, i) in heroList" :key="item.id" class="hero-slide" :class="{ on: i === heroIdx }">
             <div class="hero-cover">
               <img v-if="item.vodPic" :src="item.vodPic" alt=""
-                   @error="e => e.target.parentElement.innerHTML = '<div class=\'nc\'>🎌</div>'"/>
-              <div v-else class="nc">🎌</div>
+                   @error="e => e.target.parentElement.innerHTML = '<div class=\'nc\'>📺</div>'"/>
+              <div v-else class="nc">📺</div>
             </div>
             <div class="hero-info">
               <div class="hero-label">{{ t.hotRecommend }}</div>
@@ -100,10 +100,10 @@
           <div v-else v-for="a in hotList" :key="a.id" class="hcard" @click="$router.push(`/detail/${a.id}`)">
             <div class="cv">
               <img v-if="a.vodPic" :src="a.vodPic" loading="lazy"
-                   @error="e => e.target.parentElement.innerHTML = '<div style=\'width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:28px\'>🎌</div>'"/>
+                   @error="e => e.target.parentElement.innerHTML = '<div style=\'width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:28px\'>📺</div>'"/>
               <div v-else
                    style="width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:28px">
-                🎌
+                📺
               </div>
               <div class="ov"/>
               <div class="pi">▶</div>
@@ -137,7 +137,7 @@
               <img v-if="a.vodPic" :src="a.vodPic" loading="lazy"/>
               <div v-else
                    style="width:100%;height:100%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:32px">
-                🎌
+                📺
               </div>
               <div class="ov"/>
               <div class="pi">▶</div>
