@@ -128,14 +128,14 @@ function selectLang(val) { i18n.setLang(val); langOpen.value = false }
   border-radius: 10px; cursor: pointer; font-family: inherit;
   transition: all .18s; display: flex; align-items: center; color: var(--text);
 }
-.icon-btn:hover { border-color: var(--accent); background: rgba(124,92,252,0.1); }
+.icon-btn:hover { border-color: var(--accent); background: rgba(0,113,227,0.1); }
 
 .theme-btn { width: 36px; height: 36px; justify-content: center; font-size: 18px; }
 
 /* 白天模式下增强按钮边框 */
 [data-theme="light"] .theme-btn {
-  border-color: rgba(108,71,251,0.3);
-  background: rgba(108,71,251,0.08);
+  border-color: rgba(0,113,227,0.3);
+  background: rgba(0,113,227,0.08);
 }
 
 .download-btn { width: 36px; height: 36px; justify-content: center; font-size: 18px; }
@@ -167,7 +167,7 @@ function selectLang(val) { i18n.setLang(val); langOpen.value = false }
 
 .nav-logo-img {
   width: 36px; height: 36px; object-fit: contain;
-  filter: brightness(1.2) drop-shadow(0 0 8px rgba(196,113,237,0.6));
+  filter: brightness(1.2) drop-shadow(0 0 8px rgba(0,113,227,0.6));
 }
 .nav-logo-text { font-size: 16px; font-weight: 700; }
 

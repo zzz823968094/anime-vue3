@@ -252,9 +252,21 @@ function initPlayer(url) {
     hls = new Hls()
     hls.loadSource(url)
     hls.attachMedia(videoEl.value)
+    // HLS 实例创建后，尝试自动播放
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      videoEl.value.play().catch(e => {
+        console.log('自动播放被浏览器阻止，需要用户交互', e)
+      })
+    })
   } else if (videoEl.value.canPlayType('application/vnd.apple.mpegurl')) {
     // Safari 原生支持 HLS
     videoEl.value.src = url
+    // Safari 直接设置 src 后尝试自动播放
+    videoEl.value.addEventListener('loadeddata', () => {
+      videoEl.value.play().catch(e => {
+        console.log('自动播放被浏览器阻止，需要用户交互', e)
+      })
+    }, { once: true })
   } else {
     console.error('当前浏览器不支持 HLS 播放')
   }
@@ -612,7 +624,7 @@ onUnmounted(() => {
 <style scoped>
 .nav-logo-img { width: 32px; height: 32px; object-fit: contain; }
 .player-page { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-.nav { flex-shrink:0; height:52px; padding:0 24px; background:var(--nav-bg); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; z-index:500; }
+.nav { flex-shrink:0; height:52px; padding:0 24px; background:var(--nav-bg); backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; z-index:500; }
 .nav-logo { display:flex; align-items:center; gap:7px; text-decoration:none; font-size:16px; font-weight:700; color:var(--text); flex-shrink:0; }
 .nav-logo-icon { width:26px; height:26px; border-radius:6px; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:13px; }
 .nav-sep { color:var(--border); font-size:18px; flex-shrink:0; }
@@ -622,11 +634,11 @@ onUnmounted(() => {
 .nav-title { font-size:14px; color:var(--text); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .nav-ep { font-size:12px; color:var(--sub); flex-shrink:0; background:var(--bg3); padding:2px 8px; border-radius:4px; }
 .nav-right { margin-left:auto; display:flex; align-items:center; gap:10px; flex-shrink:0; }
-.nav-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:5px 14px; border-radius:14px; cursor:pointer; font-size:12px; font-weight:500; font-family:inherit; text-decoration:none; }
+.nav-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:5px 14px; border-radius:980px; cursor:pointer; font-size:12px; font-weight:500; font-family:inherit; text-decoration:none; }
 .u-wrap { position:relative; }
 .u-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:13px; cursor:pointer; border:2px solid transparent; transition:border-color .18s; user-select:none; }
 .u-avatar.on { border-color:var(--accent); }
-.u-drop { position:absolute; top:calc(100% + 8px); right:0; background:var(--bg3); border:1px solid var(--border); border-radius:11px; padding:6px; min-width:148px; opacity:0; pointer-events:none; transform:translateY(-5px); transition:opacity .16s,transform .16s; box-shadow:0 14px 36px rgba(0,0,0,.6); z-index:600; }
+.u-drop { position:absolute; top:calc(100% + 8px); right:0; background:var(--bg3); border:1px solid var(--border); border-radius:11px; padding:6px; min-width:148px; opacity:0; pointer-events:none; transform:translateY(-5px); transition:opacity .16s,transform .16s; box-shadow:rgba(0,0,0,0.22) 3px 5px 30px 0px; z-index:600; }
 .u-drop.on { opacity:1; pointer-events:auto; transform:translateY(0); }
 .u-drop a, .u-drop button { display:flex; align-items:center; gap:8px; width:100%; padding:8px 10px; color:var(--text); text-decoration:none; font-size:13px; background:none; border:none; cursor:pointer; font-family:inherit; border-radius:7px; transition:background .13s; text-align:left; }
 .u-drop a:hover, .u-drop button:hover { background:rgba(255,255,255,.05); }
@@ -636,7 +648,7 @@ onUnmounted(() => {
 .center::-webkit-scrollbar { width:0; }
 .player-box { flex-shrink:0; background:#000; width:100%; position:relative; }
 .player-video { width:100%; aspect-ratio:16/9; display:block; background:#000; }
-.auto-next-overlay { position:absolute; bottom:16px; right:16px; background:rgba(10,10,18,.88); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:12px; padding:14px 18px; min-width:220px; display:none; flex-direction:column; gap:10px; z-index:10; }
+.auto-next-overlay { position:absolute; bottom:16px; right:16px; background:rgba(0,0,0,.88); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:12px; padding:14px 18px; min-width:220px; display:none; flex-direction:column; gap:10px; z-index:10; }
 .auto-next-overlay.show { display:flex; }
 .an-title { font-size:13px; color:var(--sub); }
 .an-name { font-size:14px; font-weight:600; color:#fff; }
@@ -689,14 +701,14 @@ onUnmounted(() => {
 .ep-tabs { display:flex; gap:5px; flex-wrap:wrap; }
 .ep-tab { background:var(--bg3); border:1px solid var(--border); color:var(--sub); padding:3px 10px; border-radius:5px; font-size:11px; cursor:pointer; transition:all .15s; }
 .ep-tab:hover { border-color:var(--accent); color:var(--text); }
-.ep-tab.on { background:rgba(124,106,247,.15); border-color:var(--accent); color:var(--accent2); }
+.ep-tab.on { background:rgba(0,113,227,.15); border-color:var(--accent); color:var(--accent2); }
 .sb-scroll { flex:1; overflow-y:auto; padding:6px 8px; }
 .sb-scroll::-webkit-scrollbar { width:3px; }
 .sb-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
 .ep-page.on { display:flex; flex-direction:column; gap:2px; }
 .ep-item { padding:9px 12px; border-radius:7px; cursor:pointer; font-size:13px; color:var(--sub); display:flex; align-items:center; justify-content:space-between; transition:background .14s,color .14s; }
 .ep-item:hover { background:rgba(255,255,255,.04); color:var(--text); }
-.ep-item.on { background:rgba(124,106,247,.14); color:var(--accent2); font-weight:600; }
+.ep-item.on { background:rgba(0,113,227,.14); color:var(--accent2); font-weight:600; }
 .ep-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); flex-shrink:0; }
 .ep-watched { width:5px; height:5px; border-radius:50%; background:var(--sub); opacity:.5; flex-shrink:0; }
 @media (max-width: 768px) {

@@ -39,9 +39,7 @@
             <div class="anime-title">{{ anime.vodName }}</div>
             <div v-if="anime.vodName" class="anime-orig">{{ anime.vodName }}</div>
             <div class="tag-row">
-              <span class="tag" :class="statusClass">{{ statusText }}</span>
-              <span v-if="anime.vodYear" class="tag gray">📅 {{ anime.vodYear }}</span>
-              <span v-for="g in genreList" :key="g" class="tag">{{ g }}</span>
+              <span v-if="anime.vodYear" class="tag">📅 {{ anime.vodYear }}</span>
             </div>
             <div class="meta-row">
               <div v-if="anime.typeId" class="meta">{{ t.type }}<strong>{{ typeText }}</strong></div>
@@ -49,6 +47,7 @@
                 {{ t.episodesUnit }}</strong></div>
             </div>
             <template v-if="anime.vodContent">
+<!--              <div class="synopsis" :class="{ collapsed: synCollapsed }" v-html="anime.vodContent"></div>-->
               <div class="synopsis" :class="{ collapsed: synCollapsed }">{{ anime.vodContent }}</div>
               <button class="expand-btn" @click="synCollapsed = !synCollapsed">
                 {{ synCollapsed ? t.expandSynopsis : t.collapseSynopsis }}
@@ -126,15 +125,12 @@ const synCollapsed = ref(true)
 const isFaved = ref(false)
 const activeGroup = ref(0)
 
-const TYPE_MAP = computed(() => ({'25': t.value.japanAnime, '26': t.value.usAnime, '24': t.value.chinaAnime}))
+const TYPE_MAP = computed(() => ({'67': t.value.japanAnime, '68': t.value.usAnime, '66': t.value.chinaAnime}))
 const STATUS_MAP = computed(() => ({0: t.value.serializing3, 1: t.value.finished3, 2: t.value.offline}))
 const STATUS_CLASS = {0: 'gray', 1: 'green', 2: 'gray'}
 
 const bgStyle = computed(() => anime.value?.vodPic ? {backgroundImage: `url('${anime.value.vodPic}')`} : {})
-const statusText = computed(() => STATUS_MAP.value[anime.value?.vodStatus] || t.value.unknown)
-const statusClass = computed(() => STATUS_CLASS[anime.value?.vodStatus] || 'gray')
 const typeText = computed(() => TYPE_MAP.value[anime.value?.typeId] || anime.value?.typeId || '')
-const genreList = computed(() => anime.value?.vodTag?.split(',').slice(0, 4).map(g => g.trim()) || [])
 
 const EP_PAGE = 50
 const epGroups = computed(() => {

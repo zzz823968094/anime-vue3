@@ -9,7 +9,7 @@
       <span class="ep">{{ t.epLabel }}{{ anime.vodTotal }}{{ t.epSuffix }}</span>
     </div>
     <div class="ct" :title="anime.vodName">{{ anime.vodName }}</div>
-    <div class="cs">{{ typeLabel }}{{ statusLabel }}</div>
+    <div class="cs">{{ typeLabel }}</div>
   </div>
 </template>
 
@@ -24,10 +24,9 @@ const i18n    = useI18nStore()
 const t       = computed(() => i18n.t)
 const imgError = ref(false)
 
-const TYPE_MAP = computed(() => ({ '25': t.value.japan, '26': t.value.us, '24': t.value.china }))
+const TYPE_MAP = computed(() => ({ '67': t.value.japan, '68': t.value.us, '66': t.value.china }))
 
 const typeLabel   = computed(() => TYPE_MAP.value[props.anime.typeId] || '')
-const statusLabel = computed(() => props.anime.vodIsend === 0 ? ` · ${t.value.serializing2}` : ` · ${t.value.finished2}`)
 
 function goDetail() { router.push(`/detail/${props.anime.id}`) }
 </script>

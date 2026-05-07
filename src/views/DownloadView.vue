@@ -128,8 +128,8 @@ onMounted(fetchVersions)
   flex: 1;
   min-width: 280px;
   max-width: 340px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--bg2);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 28px 24px;
   display: flex;
@@ -172,9 +172,9 @@ onMounted(fetchVersions)
 }
 .download-btn:hover { opacity: 0.85; }
 
-.android-btn { background: linear-gradient(135deg, #3ddc84, #00b85c); color: #fff; }
-.ios-btn { background: linear-gradient(135deg, #60a5fa, #2563eb); color: #fff; }
-.disabled-btn { background: rgba(255,255,255,0.08); color: #475569; cursor: not-allowed; }
+.android-btn { background: linear-gradient(135deg, #3ddc84, #00b85c); color: #fff; border-radius: 980px; }
+.ios-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-radius: 980px; }
+.disabled-btn { background: var(--bg3); color: var(--sub); cursor: not-allowed; border-radius: 980px; }
 
 .tip {
   margin-top: 32px;

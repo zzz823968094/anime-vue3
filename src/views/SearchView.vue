@@ -67,7 +67,7 @@ const router = useRouter()
 const i18n   = useI18nStore()
 const t      = computed(() => i18n.t)
 
-const hotTags = ['進擊的巨人','鬼滅之刃','咒術回戰','海賊王','火影忍者','我的英雄學院','間諜過家家','異世界','魔法少女','鋼彈','名偵探柯南']
+const hotTags = ['进击的巨人','剑来','一人之下','间谍过家家','异世界','假面骑士','凡人修仙传','放开那个女巫']
 
 const keyword = computed(() => route.query.keyword?.trim() || '')
 

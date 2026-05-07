@@ -170,13 +170,13 @@ async function doRegister() {
 .login-body::before {
   content: ''; position: fixed; top: -20%; left: -10%;
   width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(124,92,252,.14) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0,113,227,.14) 0%, transparent 70%);
   pointer-events: none;
 }
 .login-body::after {
   content: ''; position: fixed; bottom: -20%; right: -10%;
   width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(196,113,237,.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(41,151,255,.1) 0%, transparent 70%);
   pointer-events: none;
 }
 .container {
@@ -194,12 +194,12 @@ async function doRegister() {
 .left::before {
   content: ''; position: absolute; top: -80px; right: -80px;
   width: 260px; height: 260px; border-radius: 50%;
-  background: rgba(124,92,252,.12);
+  background: rgba(0,113,227,.12);
 }
 .left::after {
   content: ''; position: absolute; bottom: -60px; left: -60px;
   width: 220px; height: 220px; border-radius: 50%;
-  background: rgba(196,113,237,.08);
+  background: rgba(41,151,255,.08);
 }
 .left-logo { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; position: relative; z-index: 1; }
 .left-logo-icon {
@@ -213,7 +213,7 @@ async function doRegister() {
 .left-features { position: relative; z-index: 1; }
 .feat { display: flex; align-items: center; gap: 13px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
 .feat:last-child { border-bottom: none; }
-.feat-ic { width: 36px; height: 36px; border-radius: 9px; background: rgba(124,92,252,.18); border: 1px solid rgba(124,92,252,.25); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.feat-ic { width: 36px; height: 36px; border-radius: 9px; background: rgba(0,113,227,.18); border: 1px solid rgba(0,113,227,.25); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
 .feat-text { font-size: 13px; color: rgba(255,255,255,.62); }
 .right { flex: 1; background: var(--bg2); padding: 50px 46px; display: flex; flex-direction: column; }
 .tabs { display: flex; margin-bottom: 32px; background: var(--bg3); border-radius: 12px; padding: 4px; border: 1px solid var(--border); }
@@ -226,7 +226,7 @@ async function doRegister() {
 .input-wrap { position: relative; }
 .input-ic { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--sub); pointer-events: none; }
 .fg input { width: 100%; background: var(--bg3); border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px 12px 40px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; transition: all .2s; }
-.fg input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); background: rgba(124,92,252,.04); }
+.fg input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); background: rgba(0,113,227,.04); }
 .fg input.err { border-color: var(--red); }
 .ferr { font-size: 11px; color: var(--red); margin-top: 4px; min-height: 15px; }
 .submit { width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 800; font-family: inherit; box-shadow: 0 4px 18px var(--glow); transition: transform .18s, box-shadow .18s, opacity .18s; margin-top: 4px; }

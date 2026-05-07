@@ -34,9 +34,6 @@
               <div class="hero-title" :title="item.vodName">{{ item.vodName }}</div>
               <div class="hero-tags">
                 <span v-if="item.rating > 0" class="hero-tag gold">★ {{ item.rating }}</span>
-                <span class="hero-tag" :class="item.vodIsend === 1 ? 'green' : ''">
-                  {{ item.vodIsend === 1 ? t.serializing : t.finished }}
-                </span>
                 <span v-if="item.vodTotal > 0" class="hero-tag">{{ t.episodes }} {{
                     item.vodTotal
                   }} {{ t.episodesUnit }}</span>
@@ -71,16 +68,7 @@
       </div>
     </section>
 
-    <!-- Tab Bar -->
-    <div class="tabs-bar">
-      <div class="tabs-inner">
-        <button v-for="tab in tabs" :key="tab.value" class="tab" :class="{ on: activeTab === tab.value }"
-                @click="setTab(tab.value)">
-          <div class="tab-dot"/>
-          {{ tab.label }}
-        </button>
-      </div>
-    </div>
+
 
     <!-- Main Content -->
     <div class="main">
@@ -111,13 +99,24 @@
             </div>
             <div class="ct" :title="a.vodName">{{ a.vodName }}</div>
             <div class="cs">{{
-                a.vodScore > 0 ? '★' + a.vodScore + ' · ' : ''
-              }}{{ a.vodIsend === 0 ? t.serializing2 : t.finished2 }}
+                a.vodScore > 0 ? '★' + a.vodScore: ''
+              }}
             </div>
           </div>
         </div>
       </div>
-
+    </div>
+      <!-- Tab Bar -->
+      <div class="tabs-bar">
+        <div class="tabs-inner">
+          <button v-for="tab in tabs" :key="tab.value" class="tab" :class="{ on: activeTab === tab.value }"
+                  @click="setTab(tab.value)">
+            <div class="tab-dot"/>
+            {{ tab.label }}
+          </button>
+        </div>
+      </div>
+    <div  class="main">
       <!-- Latest Grid -->
       <div class="sec">
         <div class="sec-head">
@@ -143,14 +142,11 @@
               <div class="pi">▶</div>
               <div v-if="a.vodScore > 0" class="score">★ {{ a.vodScore }}</div>
               <span class="ep">{{ t.episodes }} {{ a.vodTotal }} {{ t.episodesUnit }}</span>
-              <span class="status-badge" :class="a.vodIsend === 1 ? 'status-on' : 'status-end'">
-                {{ a.vodIsend === 0 ? t.serializing2 : t.finished2 }}
-              </span>
             </div>
             <div class="ct" :title="a.vodName">{{ a.vodName }}</div>
             <div class="cs">{{ TYPE_MAP[a.typeId] || '' }}{{
-                a.typeId ? ' · ' : ''
-              }}{{ a.vodIsend === 0 ? t.serializing2 : t.finished2 }}
+                a.typeId ? '' : ''
+              }}
             </div>
           </div>
         </div>
@@ -171,14 +167,14 @@ const i18n = useI18nStore()
 const t = computed(() => i18n.t)
 
 const TYPE_MAP = computed(() => ({
-  '25': t.value.japan, '26': t.value.us, '24': t.value.china
+  '67': t.value.japan, '68': t.value.us, '66': t.value.china
 }))
 
 const tabs = computed(() => [
   {value: '', label: t.value.allType},
-  {value: '25', label: t.value.japanAnime},
-  {value: '26', label: t.value.usAnime},
-  {value: '24', label: t.value.chinaAnime},
+  {value: '66', label: t.value.chineseAnime},
+  {value: '67', label: t.value.japaneseKoreanAnime},
+  {value: '68', label: t.value.westernAnime},
 ])
 
 const heroList = ref([])
@@ -342,7 +338,7 @@ onUnmounted(() => clearInterval(heroTimer))
   .tabs-inner {
     gap: 0;
     overflow-x: auto;
-    padding: 0 12px;
+    padding: 0 0 0 0;
   }
 
   .tab {

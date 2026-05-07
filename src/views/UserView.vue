@@ -62,7 +62,7 @@
               <button class="rm-btn" @click.stop="removeFav(item.id)">✕</button>
             </div>
             <div class="ct" :title="item.vodName">{{ item.vodName || t.loadFail }}</div>
-            <div class="cs">{{ item.vodYear || '' }}{{ item.vodIsend === 0 ? ` · ${t.serializing2}` : ` · ${t.finished2}` }}</div>
+            <div class="cs">{{ item.vodYear || '' }}</div>
           </div>
         </div>
       </div>
@@ -227,7 +227,7 @@ onMounted(() => {
 .side-menu { background:var(--bg2); border:1px solid var(--border2); border-radius:16px; overflow:hidden; }
 .side-item { display:flex; align-items:center; gap:10px; padding:13px 16px; font-size:14px; color:var(--sub); cursor:pointer; transition:all .18s; border:none; background:none; width:100%; font-family:inherit; text-align:left; border-left:3px solid transparent; font-weight:600; }
 .side-item:hover { color:var(--text); background:var(--bg3); }
-.side-item.on { color:var(--accent2); background:rgba(124,92,252,.1); border-left-color:var(--accent); }
+.side-item.on { color:var(--accent2); background:rgba(0,113,227,.1); border-left-color:var(--accent); }
 .side-item .icon { font-size:16px; flex-shrink:0; }
 .side-item + .side-item { border-top:1px solid var(--border); }
 .side-danger { color:var(--red) !important; }
@@ -238,7 +238,7 @@ onMounted(() => {
 .panel-title { font-size:18px; font-weight:800; color:var(--text); display:flex; align-items:center; gap:9px; }
 .panel-title::before { content:''; width:4px; height:18px; background:linear-gradient(to bottom,var(--accent),var(--accent2)); border-radius:2px; }
 .panel-action { font-size:12px; color:var(--sub); cursor:pointer; padding:5px 13px; border-radius:8px; border:1.5px solid var(--border); background:none; font-family:inherit; transition:all .18s; font-weight:600; }
-.panel-action:hover { border-color:var(--accent); color:var(--accent2); background:rgba(124,92,252,.08); }
+.panel-action:hover { border-color:var(--accent); color:var(--accent2); background:rgba(0,113,227,.08); }
 .info-form { max-width: 480px; background:var(--bg2); border:1px solid var(--border2); border-radius:14px; padding:26px; }
 .form-row { margin-bottom:20px; }
 .form-label { font-size:12px; color:var(--sub); margin-bottom:7px; font-weight:700; letter-spacing:.4px; }
@@ -266,7 +266,7 @@ onMounted(() => {
 .empty-state .ei { font-size:52px; margin-bottom:14px; }
 .empty-state .et { font-size:16px; color:var(--text); margin-bottom:6px; font-weight:700; }
 .empty-state .es { font-size:13px; margin-bottom:22px; }
-.empty-state a { display:inline-block; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; text-decoration:none; padding:9px 22px; border-radius:18px; font-size:13px; font-weight:700; box-shadow:0 4px 14px var(--glow); }
+.empty-state a { display:inline-block; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; text-decoration:none; padding:9px 22px; border-radius:980px; font-size:13px; font-weight:700; box-shadow:0 4px 14px var(--glow); }
 .sk .sk-cv { width:100%; aspect-ratio:3/4; border-radius:10px; margin-bottom:7px; }
 .sk .sk-ln { height:11px; border-radius:4px; margin-bottom:4px; }
 @media (max-width: 768px) {
