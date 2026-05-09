@@ -44,7 +44,7 @@
             <div class="meta-row">
               <div v-if="anime.typeId" class="meta">{{ t.type }}<strong>{{ typeText }}</strong></div>
               <div class="meta">{{ t.episodes2 }}<strong>{{ anime.vodTotal || anime.currentEpisode || '?' }}
-                {{ t.episodesUnit }}</strong></div>
+                {{ t.episodesUnit }}</strong></div>s
             </div>
             <template v-if="anime.vodContent">
 <!--              <div class="synopsis" :class="{ collapsed: synCollapsed }" v-html="anime.vodContent"></div>-->
