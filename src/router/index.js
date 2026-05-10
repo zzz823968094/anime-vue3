@@ -8,6 +8,7 @@ const routes = [
   { path: '/login',      name: 'Login',  component: () => import('@/views/LoginView.vue') },
   { path: '/user',       name: 'User',   component: () => import('@/views/UserView.vue'), meta: { requiresAuth: true } },
   { path: '/download',   name: 'Download', component: () => import('@/views/DownloadView.vue') },
+  { path: '/maintenance', name: 'Maintenance', component: () => import('@/views/MaintenanceView.vue') },
 ]
 
 const router = createRouter({

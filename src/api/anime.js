@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {API_BASE_URL} from '@/config/env'
+import router from '@/router'
 
 const http = axios.create({
     baseURL: API_BASE_URL,
@@ -15,8 +16,22 @@ http.interceptors.request.use(config => {
 
 // 響應攔截：統一解包
 http.interceptors.response.use(
-    res => res.data,
-    err => Promise.reject(err)
+    res => {
+        // 檢查返回的 code 是否為 999（維護狀態）
+        if (res.data && res.data.code === 999) {
+            // 跳轉到維護頁面
+            router.push('/maintenance').catch(() => {})
+            return Promise.reject(new Error('系統維護中'))
+        }
+        return res.data
+    },
+    err => {
+        // 也可以在錯誤處理中加入對特定錯誤碼的判斷
+        if (err.response && err.response.data && err.response.data.code === 999) {
+            router.push('/maintenance').catch(() => {})
+        }
+        return Promise.reject(err)
+    }
 )
 
 /* ── 番劇 ── */
@@ -107,5 +122,12 @@ export const historyApi = {
 export const appVersionApi = {
     getLatest(platform) {
         return http.get('/api/admin/app-versions/latest', {params: {platform}})
+    },
+}
+
+/* ── 系統狀態 ── */
+export const systemApi = {
+    getUpdateStatus() {
+        return http.get('/api/admin/system/update-status')
     },
 }
