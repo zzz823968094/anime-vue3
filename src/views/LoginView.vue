@@ -130,6 +130,7 @@ async function doLogin() {
   try {
     const res = await authApi.login(lUser.value.trim(), lPass.value)
     if (res.code === 200) {
+      console.log(res.data)
       auth.login(res.data.access_token, lUser.value.trim())
       showMsg('✓ ' + t.value.loginBtnLoading, 'ok')
       setTimeout(() => router.push(route.query.redirect || '/'), 900)

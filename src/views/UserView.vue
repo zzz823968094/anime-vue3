@@ -26,9 +26,8 @@
           <div v-if="infoLoading" style="text-align:center;padding:40px;color:var(--sub)">{{ t.loading }}</div>
           <template v-else-if="userInfo">
             <div class="form-row"><div class="form-label">{{ t.usernameLabel }}</div><div class="form-val">{{ userInfo.username }}</div></div>
-            <div class="form-row"><div class="form-label">{{ t.emailLabel }}</div><div class="form-val">{{ userInfo.email || t.emailNotSet }}</div><div class="form-note">{{ t.emailNote }}</div></div>
             <div class="form-row"><div class="form-label">{{ t.roleLabel }}</div><div class="form-val">{{ userInfo.role === 1 ? t.admin : t.normalUser }}</div></div>
-            <div class="form-row"><div class="form-label">{{ t.regTimeLabel }}</div><div class="form-val">{{ userInfo.createdAt ? userInfo.createdAt.slice(0, 10) : t.unknownTime }}</div></div>
+            <div class="form-row"><div class="form-label">{{ t.regTimeLabel }}</div><div class="form-val">{{ userInfo.createTime ? userInfo.createTime.slice(0, 10) : t.unknownTime }}</div></div>
             <div class="form-row"><div class="form-label">{{ t.lastLoginLabel }}</div><div class="form-val">{{ userInfo.lastLoginAt ? userInfo.lastLoginAt.slice(0, 16).replace('T', ' ') : t.unknownTime }}</div></div>
           </template>
           <template v-else>
@@ -58,7 +57,7 @@
               <img v-if="item.vodPic" :src="item.vodPic" loading="lazy" />
               <div v-else class="nc">📺</div>
               <div class="ov" /><div class="pi">▶</div>
-              <span class="ep-tag">{{ t.epLabel }}{{ item.vodTotal || '?' }}{{ t.epSuffix }}</span>
+              <span class="ep-tag">{{ t.epTotal }}{{ item.vodTotal || '?' }}{{ t.epSuffix }}</span>
               <button class="rm-btn" @click.stop="removeFav(item.id)">✕</button>
             </div>
             <div class="ct" :title="item.vodName">{{ item.vodName || t.loadFail }}</div>
@@ -86,11 +85,11 @@
               <img v-if="item.vodPic" :src="item.vodPic" loading="lazy" />
               <div v-else class="nc">📺</div>
               <div class="ov" /><div class="pi">▶</div>
-              <span class="ep-tag">{{ t.epLabel }}{{ item.vodTotal }}{{ t.epSuffix }}</span>
+              <span class="ep-tag">{{ t.epTotal }}{{ item.vodTotal }}{{ t.epSuffix }}</span>
               <button class="rm-btn" @click.stop="removeHistory(item.animeId)">✕</button>
             </div>
             <div class="ct" :title="item.vodName">{{ item.vodName }}</div>
-            <div class="cs">{{ t.watchedTo }} {{ item.episode }}</div>
+            <div class="cs">{{ t.watchedTo }} {{ item.episode }}{{t.episodesUnit}}</div>
             <div class="prog-bar"><div class="prog-fill" :style="{ width: (item.progress || 0) + '%' }" /></div>
           </div>
         </div>
@@ -148,11 +147,10 @@ async function loadFavs() {
   favLoading.value = true
   try {
     const res = await favoriteApi.list()
-    const ids = res.data || []
-    favCount.value = ids.length
-    if (!ids.length) { favList.value = []; return }
-    const results = await Promise.allSettled(ids.map(id => animeApi.getDetail(id)))
-    favList.value = results.map((r, i) => r.status === 'fulfilled' ? { id: ids[i], ...r.value?.data } : { id: ids[i] })
+    const list = res.data || []
+    favCount.value = list.length
+    if (!list.length) { favList.value = []; return }
+    favList.value = list
   } catch { favList.value = [] }
   finally { favLoading.value = false }
 }
