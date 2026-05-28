@@ -123,6 +123,24 @@ onMounted(() => theme.applyTheme())
 ══════════════════════════════════════════ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* ══════════════════════════════════════════
+   VIEW TRANSITION：圆形扩散主题切换动画
+══════════════════════════════════════════ */
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: theme-expand 0.5s ease-in-out both;
+  clip-path: circle(0% at var(--theme-clip-x, 50%) var(--theme-clip-y, 50%));
+}
+
+@keyframes theme-expand {
+  to {
+    clip-path: circle(200vmax at var(--theme-clip-x, 50%) var(--theme-clip-y, 50%));
+  }
+}
+
 .app-wrapper {
   display: flex;
   flex-direction: column;
